@@ -32,8 +32,8 @@ export default function Home() {
                 най-добър вид. Ела в бръснарницата ни в Пловдив и опитай.
               </p>
 
-              <Link href="/services">
-                <button className="mt-6 px-6 py-3 bg-primary text-xl text-primary-content rounded-lg hover:bg-accent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+              <Link href="/book">
+                <button className="mt-6 px-6 py-3 bg-primary text-xl text-black rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
                   Запази час
                 </button>
               </Link>

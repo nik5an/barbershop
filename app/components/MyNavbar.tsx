@@ -6,6 +6,8 @@ import { IoIosMenu } from "react-icons/io";
 import { IoIosClose } from "react-icons/io";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { Link as ScrollLink } from "react-scroll";
+import { useSession } from "next-auth/react";
+import UserAccountNav from "./UserAccountNav";
 
 const links = [
   { href: "services", label: "Услуги" },
@@ -15,13 +17,14 @@ const logo = "https://i.postimg.cc/6qvB4KXY/barbershop-logo.png";
 
 const MyNavbar = () => {
   let [open, setOpen] = useState(false);
+  const { data: session } = useSession();
 
   return (
-    <nav className=" bg-black bg-opacity-30">
-      <div className="navbar max-w-5xl mx-auto flex-col md:flex-row justify-between">
+    <nav className="bg-black bg-opacity-30">
+      <div className="navbar max-w-5xl mx-auto flex-col md:flex-row justify-between relative">
         <div className="flex justify-center md:justify-start">
           <Link href="/" className="btn btn-primary rounded-lg">
-            <div className="w-40 h-28">
+            <div className="w-40 h-18">
               <Image src={logo} alt="logo" width={500} height={500}></Image>
             </div>
           </Link>
@@ -52,13 +55,6 @@ const MyNavbar = () => {
               </ScrollLink>
             </li>
           ))}
-          <li>
-            <Link href={"/profile"}>
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-black bg-opacity-80 text-4xl text-white">
-                <MdOutlineAccountCircle className="" />
-              </div>
-            </Link>
-          </li>
           <li className="md:ml-4 mt-0">
             <Link href={"/en"}>
               <div className="w-2 h-2">
@@ -71,6 +67,31 @@ const MyNavbar = () => {
                 />
               </div>
             </Link>
+          </li>
+          <li className="relative">
+            <div className="dropdown">
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn m-1 bg-black bg-opacity-80"
+              >
+                <div className="flex items-center justify-center w-12 h-12 rounded-full  text-4xl text-white">
+                  <MdOutlineAccountCircle />
+                </div>
+              </div>
+              <ul
+                tabIndex={0}
+                className="dropdown-content z-[1] menu p-1 shadow bg-base-100 rounded-box w-22 absolute top-full left-0 text-sm"
+              >
+                <li>
+                  {session?.user ? (
+                    <UserAccountNav />
+                  ) : (
+                    <Link href={"/sign-in"}>Sign in</Link>
+                  )}
+                </li>
+              </ul>
+            </div>
           </li>
         </ul>
       </div>
