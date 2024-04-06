@@ -15,14 +15,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import Link from "next/link";
-import GoogleSignIn from "../GoogleSignIn";
-import { useRouter } from "next/navigation";
+import { DialogTrigger } from "@/components/ui/dialog";
 
 const FormSchema = z
   .object({
-    username: z.string().min(1, "Username is required").max(100),
+    fname: z.string().min(1, "Username is required").max(100),
+    lname: z.string().min(1, "Username is required").max(100),
     email: z.string().min(1, "Email is required").email("Invalid email"),
+    number: z.string().min(1, "Phone number is required").max(10),
     password: z
       .string()
       .min(1, "Password is required")
@@ -35,15 +35,16 @@ const FormSchema = z
   });
 
 const SignUpForm = () => {
-  const router = useRouter();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: "",
+      fname: "",
+      lname: "",
       password: "",
       email: "",
       confirmPassword: "",
+      number: "",
     },
   });
 
@@ -54,18 +55,25 @@ const SignUpForm = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: values.username,
+        fname: values.fname,
+        lname: values.lname,
         email: values.email,
         password: values.password,
+        number: values.number,
       }),
     });
 
     if (response.ok) {
-      router.push("/sign-in");
+      toast({
+        title: "Success",
+        description:
+          "Вие успешно създадохте профила си, моля влезте през меню Профил -> Влез",
+        variant: "success",
+      });
     } else {
       toast({
         title: "Error",
-        description: "Something went wrong!",
+        description: "Username/Email is already used!",
         variant: "destructive",
       });
     }
@@ -76,14 +84,51 @@ const SignUpForm = () => {
         <div className="space-y-2">
           <FormField
             control={form.control}
-            name="username"
+            name="fname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Име</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Enter your username"
+                    placeholder="Иван"
+                    type="fname"
+                    autoComplete="fname"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lname"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Фамилия</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Иванов"
+                    type="lname"
+                    autoComplete="lname"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="number"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Телефон</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="08XXXXXXXX"
                     type="username"
+                    autoComplete="phone"
                     {...field}
                   />
                 </FormControl>
@@ -96,11 +141,12 @@ const SignUpForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Имейл адрес</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Enter your email"
+                    placeholder="email@mail.com"
                     type="email"
+                    autoComplete="email"
                     {...field}
                   />
                 </FormControl>
@@ -113,11 +159,12 @@ const SignUpForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Парола</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Enter your password"
+                    placeholder="Въведете вашата парола"
                     type="password"
+                    autoComplete="current-password"
                     {...field}
                   />
                 </FormControl>
@@ -130,11 +177,12 @@ const SignUpForm = () => {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirm password</FormLabel>
+                <FormLabel>Повтори парола</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Re-Enter your password"
+                    placeholder="Въведете отново вашата парола"
                     type="password"
+                    autoComplete="current-password"
                     {...field}
                   />
                 </FormControl>
@@ -144,7 +192,7 @@ const SignUpForm = () => {
           />
         </div>
         <Button className="w-full mt-4" type="submit">
-          Register
+          Регистрирай
         </Button>
       </form>
       <div
@@ -153,13 +201,12 @@ const SignUpForm = () => {
       >
         or
       </div>
-      <GoogleSignIn>Sign up with Google</GoogleSignIn>
-      <p className="text-center text-sm text-gray-600 mt-2">
-        If you already have an account, please&nbsp;
-        <Link className="text-blue-500 hover:underline" href="/sign-in">
-          Sign in
-        </Link>
-      </p>
+      <div className="text-center text-sm text-gray-600 mt-2">
+        Ако вече имате създаден профил, моля&nbsp;
+        <DialogTrigger className="text-blue-500 hover:underline">
+          влезте
+        </DialogTrigger>
+      </div>
     </Form>
   );
 };

@@ -4,18 +4,20 @@ import { hash } from "bcrypt";
 import * as z from "zod";
 
 const userSchema = z.object({
-  username: z.string().min(1, "Username is required").max(100),
+  fname: z.string().min(1, "First name is required").max(100),
+  lname: z.string().min(1, "Last name is required").max(100),
   email: z.string().min(1, "Email is required").email("Invalid email"),
+  number: z.string().min(1, "Phone number is required").max(10),
   password: z
     .string()
-    .min(1, "Password is required")
-    .min(8, "Password must have more than 8 characters"),
+    .min(1, "Паролата е задължителна")
+    .min(8, "Паролата трябва да съдържа поне 8 знака"),
 });
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { email, username, password } = userSchema.parse(body);
+    const { email, fname, lname, password, number } = userSchema.parse(body);
 
     const existingUserByEmail = await db.user.findUnique({
       where: { email: email },
@@ -30,24 +32,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const existingUserByUsername = await db.user.findUnique({
-      where: { username: username },
-    });
-    if (existingUserByUsername) {
-      return NextResponse.json(
-        {
-          user: null,
-          message: "Username already exists",
-        },
-        { status: 409 }
-      );
-    }
-
     const hashedPassword = await hash(password, 10);
 
     const newUser = await db.user.create({
       data: {
-        username,
+        fname,
+        lname,
+        number,
         email,
         password: hashedPassword,
       },

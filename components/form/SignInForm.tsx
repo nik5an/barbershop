@@ -7,25 +7,34 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import GoogleSignIn from "../GoogleSignIn";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import SignUpForm from "./SignUpForm";
 
 const FormSchema = z.object({
-  email: z.string().min(1, "Email is required").email("Invalid email"),
+  email: z
+    .string()
+    .min(1, "Имейл адресът е задължителен")
+    .email("Невалиден имейл адрес"),
   password: z
     .string()
-    .min(1, "Password is required")
-    .min(8, "Password must have more than 8 characters"),
+    .min(1, "Паролата е задължителна")
+    .min(8, "Паролата трябва да има поне 8 знака"),
 });
 
 const SignInForm = () => {
@@ -48,13 +57,17 @@ const SignInForm = () => {
 
     if (signInData?.error) {
       toast({
-        title: "Error",
-        description: "Something went wrong!",
+        title: "Something went wrong",
+        description: "Имейлът/паролата са грешни!",
         variant: "destructive",
       });
     } else {
+      toast({
+        title: "Success",
+        description: "Успешно влязохте в профила си!",
+        variant: "success",
+      });
       router.refresh();
-      router.push("/admin");
     }
   };
   return (
@@ -66,11 +79,12 @@ const SignInForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Имейл адрес</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Enter your email"
+                    placeholder="Въведете вашата е-поща"
                     type="email"
+                    autoComplete="email"
                     {...field}
                   />
                 </FormControl>
@@ -83,11 +97,12 @@ const SignInForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Парола</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Enter your password"
+                    placeholder="Въведете вашата парола"
                     type="password"
+                    autoComplete="current-password"
                     {...field}
                   />
                 </FormControl>
@@ -97,7 +112,7 @@ const SignInForm = () => {
           />
         </div>
         <Button className="w-full mt-4" type="submit">
-          Sign in
+          Влез
         </Button>
       </form>
       <div
@@ -106,13 +121,22 @@ const SignInForm = () => {
       >
         or
       </div>
-      <GoogleSignIn>Sign in with Google</GoogleSignIn>
-      <p className="text-center text-sm text-gray-600 mt-2">
-        If you don&apos;t have an account, please&nbsp;
-        <Link className="text-blue-500 hover:underline" href="/sign-up">
-          Register
-        </Link>
-      </p>
+      <div className="text-center text-sm text-gray-600 mt-2">
+        Ако нямате профил, моля се&nbsp;
+        <Dialog>
+          <DialogTrigger className="text-blue-500 hover:underline">
+            регистрирайте
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="text-center font-normal">
+                Регистрация
+              </DialogTitle>
+              <SignUpForm></SignUpForm>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      </div>
     </Form>
   );
 };

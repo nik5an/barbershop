@@ -1,15 +1,17 @@
-import MyNavbar from "@/app/components/MyNavbar";
+import MyNavbar from "@/components/MyNavbar";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-const page = async () => {
+const AdminPage = async () => {
   const session = await getServerSession(authOptions);
-  if (session?.user) {
+
+  if (session?.user.email === "asd@gmail.com") {
     return (
       <div>
         <MyNavbar />
         <h2 className="text-2xl flex justify-center items-center h-screen">
-          Admin page - welcome, {session?.user.username}
+          Admin page - welcome, {session?.user.fname}
         </h2>
       </div>
     );
@@ -18,10 +20,10 @@ const page = async () => {
     <div>
       <MyNavbar />
       <h2 className="text-2xl flex justify-center items-center h-screen">
-        Please login to see this admin page
+        You don&apos;t have access to this page. Please return back.
       </h2>
     </div>
   );
 };
 
-export default page;
+export default AdminPage;

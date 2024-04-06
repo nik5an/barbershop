@@ -14,10 +14,19 @@ datasource db {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  username String @unique
-  password String 
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  fname     String
+  lname     String
+  password  String
+  number    String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  appointments Appointments[]
+}
+
+model Appointments {
+  id       Int      @id @default(autoincrement())
+  datetime DateTime
+  user     User     @relation(fields: [uId], references: [id])
+  uId Int
 }

@@ -12,7 +12,7 @@ const orelega_One = Orelega_One({
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Barbershop",
+  title: "Relax Barbershop",
 };
 
 export default function RootLayout({

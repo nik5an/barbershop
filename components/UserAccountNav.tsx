@@ -6,12 +6,12 @@ import Link from "next/link";
 const UserAccountNav = () => {
   return (
     <Link
-      href={"/sign-in"}
+      href={"/"}
       className="text-error"
       onClick={() =>
         signOut({
           redirect: true,
-          callbackUrl: `${window.location.origin}/sign-in`,
+          callbackUrl: `${window.location.origin}`,
         })
       }
     >

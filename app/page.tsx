@@ -1,7 +1,7 @@
-import Link from "next/link";
-import MyNavbar from "./components/MyNavbar";
+import MyNavbar from "../components/MyNavbar";
 import Image from "next/image";
-import Footer from "./components/MyFooter";
+import Footer from "../components/MyFooter";
+import BookAppointment from "@/components/BookAppointment";
 
 const BG = "/bg.jpg";
 const BG1 = "/bg1.jpg";
@@ -21,9 +21,9 @@ export default function Home() {
           style={{ backgroundImage: `url(${BG})` }}
         >
           <MyNavbar />
-          <div className="text-white py-12 md:py-24">
-            <div className="bg-black bg-opacity-40 rounded-lg py-12 md:py-20 text-center max-w-3xl mx-auto">
-              <h1 className="text-5xl lg:text-8xl mt-8 lg:mt-0">BARBERSHOP</h1>
+          <div className="text-white py-4 md:py-24">
+            <div className="bg-black bg-opacity-40 rounded-lg py-4 md:py-20 text-center max-w-3xl mx-auto">
+              <h1 className="text-5xl lg:text-8xl lg:mt-0">RELAX BARBERSHOP</h1>
               <p className="mt-4 text-lg lg:text-2xl leading-none lg:leading-normal">
                 Първокачествено обслужване в уникална атмосфера
               </p>
@@ -31,12 +31,7 @@ export default function Home() {
                 Помагаме ти да поддържаш брадата си и винаги да изглеждаш в
                 най-добър вид. Ела в бръснарницата ни в Пловдив и опитай.
               </p>
-
-              <Link href="/book">
-                <button className="mt-6 px-6 py-3 bg-primary text-xl text-black rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
-                  Запази час
-                </button>
-              </Link>
+              <BookAppointment></BookAppointment>
             </div>
           </div>
         </div>
@@ -57,7 +52,7 @@ export default function Home() {
                 className="rounded-full"
               />
             </div>
-            <h1 className="text-xl m-4">Подстригване - 15лв</h1>
+            <h1 className="text-xl m-4">Подстрижка - 15лв</h1>
           </div>
           <div>
             <div className="w-48 h-48 flex items-center mx-auto my-8">

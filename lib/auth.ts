@@ -50,8 +50,10 @@ export const authOptions: NextAuthOptions = {
 
           return {
             id: `${existingUser.id}`,
-            username: existingUser.username,
+            fname: existingUser.fname,
+            lname: existingUser.lname,
             email: existingUser.email,
+            number: existingUser.number,
           };
         } catch (error) {
           console.error("Authorization error:", error);
@@ -65,7 +67,9 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         return {
           ...token,
-          username: user.username,
+          email: user.email,
+          fname: user.fname,
+          lname: token.lname,
         };
       }
       return token;
@@ -75,7 +79,9 @@ export const authOptions: NextAuthOptions = {
         ...session,
         user: {
           ...session.user,
-          username: token.username,
+          email: token.email,
+          fname: token.fname,
+          lname: token.lname,
         },
       };
     },

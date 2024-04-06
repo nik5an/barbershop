@@ -8,6 +8,16 @@ import { MdOutlineAccountCircle } from "react-icons/md";
 import { Link as ScrollLink } from "react-scroll";
 import { useSession } from "next-auth/react";
 import UserAccountNav from "./UserAccountNav";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import SignInForm from "./form/SignInForm";
+import { MdManageAccounts } from "react-icons/md";
 
 const links = [
   { href: "services", label: "Услуги" },
@@ -55,19 +65,7 @@ const MyNavbar = () => {
               </ScrollLink>
             </li>
           ))}
-          <li className="md:ml-4 mt-0">
-            <Link href={"/en"}>
-              <div className="w-2 h-2">
-                <Image
-                  src={"/uk.png"}
-                  alt="english"
-                  fill
-                  sizes="100%"
-                  style={{ objectFit: "contain" }}
-                />
-              </div>
-            </Link>
-          </li>
+
           <li className="relative">
             <div className="dropdown">
               <div
@@ -75,19 +73,38 @@ const MyNavbar = () => {
                 role="button"
                 className="btn m-1 bg-black bg-opacity-80"
               >
-                <div className="flex items-center justify-center w-12 h-12 rounded-full  text-4xl text-white">
-                  <MdOutlineAccountCircle />
+                <div className="flex items-center justify-center w-12 h-12 text-4xl text-white">
+                  {session?.user ? (
+                    <MdManageAccounts />
+                  ) : (
+                    <MdOutlineAccountCircle />
+                  )}
                 </div>
               </div>
               <ul
                 tabIndex={0}
-                className="dropdown-content z-[1] menu p-1 shadow bg-base-100 rounded-box w-22 absolute top-full left-0 text-sm"
+                className="dropdown-content z-[1] menu p-1 shadow bg-base-100 rounded-box w-22 absolute top-full left-0 text-base"
               >
                 <li>
                   {session?.user ? (
-                    <UserAccountNav />
+                    <>
+                      {session?.user.email === "asd@gmail.com" ? (
+                        <Link href={"/admin"}>Admin</Link>
+                      ) : null}
+                      <UserAccountNav />
+                    </>
                   ) : (
-                    <Link href={"/sign-in"}>Sign in</Link>
+                    <Dialog>
+                      <DialogTrigger className="w-20">Влез</DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle className="text-center font-normal">
+                            Логин
+                          </DialogTitle>
+                          <SignInForm></SignInForm>
+                        </DialogHeader>
+                      </DialogContent>
+                    </Dialog>
                   )}
                 </li>
               </ul>
