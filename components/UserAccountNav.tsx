@@ -15,7 +15,7 @@ const UserAccountNav = () => {
         })
       }
     >
-      Sign out
+      Излез
     </Link>
   );
 };

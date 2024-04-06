@@ -21,7 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import SignUpForm from "./SignUpForm";
@@ -64,7 +64,7 @@ const SignInForm = () => {
     } else {
       toast({
         title: "Success",
-        description: "Успешно влязохте в профила си!",
+        description: `Успешно влязохте в профила си!`,
         variant: "success",
       });
       router.refresh();

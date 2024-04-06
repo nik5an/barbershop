@@ -192,7 +192,7 @@ const SignUpForm = () => {
           />
         </div>
         <Button className="w-full mt-4" type="submit">
-          Регистрирай
+          Регистрирай се
         </Button>
       </form>
       <div
