@@ -20,7 +20,10 @@ import { useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
 
 const BookAppointment = () => {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const [date, setDate] = useState<Date | undefined>(tomorrow);
   const [timeSlot, setTimeSlot] = useState<{ time: string }[]>([]);
   const [myNote, setNote] = useState("");
   const { toast } = useToast();
