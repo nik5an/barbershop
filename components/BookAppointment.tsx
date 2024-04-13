@@ -16,17 +16,33 @@ import { MdOutlineCalendarMonth } from "react-icons/md";
 import { isPast } from "date-fns";
 import { Button } from "./ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useSession } from "next-auth/react";
+import { useToast } from "@/components/ui/use-toast";
 
 const BookAppointment = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [timeSlot, setTimeSlot] = useState<{ time: string }[]>([]);
+  const [myNote, setNote] = useState("");
+  const { toast } = useToast();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<
     string | undefined
   >();
-
+  const { data: session } = useSession();
+  const temp = session?.user.id?.toString();
+  const userId = temp ? parseInt(temp) : undefined;
+  const dateTime =
+    date && selectedTimeSlot
+      ? new Date(
+          date.setHours(
+            parseInt(selectedTimeSlot.split(":")[0]) + 3,
+            parseInt(selectedTimeSlot.split(":")[1])
+          )
+        )
+      : null;
   useEffect(() => {
     getTime();
   }, []);
+
   const getTime = () => {
     const timeList = [];
     for (let i = 10; i <= 18; i++) {
@@ -40,6 +56,33 @@ const BookAppointment = () => {
     setTimeSlot(timeList);
   };
 
+  const saveBooking = async () => {
+    const response = await fetch("/api/appointment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        datetime: dateTime,
+        note: myNote,
+        uId: userId,
+      }),
+    });
+
+    if (response.ok) {
+      toast({
+        title: "Success",
+        description: "Вие успешно запазихте час.",
+        variant: "success",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: "Something went wrong",
+        variant: "destructive",
+      });
+    }
+  };
   return (
     <Dialog>
       <DialogTrigger className="mt-6 px-6 py-3 bg-primary text-xl text-black rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
@@ -89,17 +132,24 @@ const BookAppointment = () => {
             <Textarea
               placeholder="Бележка (незадължително)"
               className="mt-2"
+              onChange={(e) => setNote(e.target.value)}
             ></Textarea>
           </div>
         </DialogHeader>
         <DialogFooter className="sm:justify-end">
           <DialogClose asChild>
             <>
-              <Button type="button" variant={"secondary"}>
-                Затвори
-              </Button>
-              <Button type="button" disabled={!(date && selectedTimeSlot)}>
-                Следващ
+              <DialogTrigger>
+                <Button type="button" variant={"secondary"}>
+                  Затвори
+                </Button>
+              </DialogTrigger>
+              <Button
+                type="button"
+                disabled={!(date && selectedTimeSlot)}
+                onClick={() => saveBooking()}
+              >
+                Запази
               </Button>
             </>
           </DialogClose>

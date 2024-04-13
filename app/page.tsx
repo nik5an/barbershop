@@ -106,11 +106,11 @@ export default function Home() {
           <div className="bg-black bg-opacity-70 text-center py-12">
             <h1 className="text-3xl text-white">Работно време</h1>
             <div className="grid grid-cols-1 md:grid-cols-2">
-              <div className="m-8 md:m-4 bg-black bg-opacity-80 border border-white border-opacity-50 rounded-lg p-8 max-w-xs md:justify-self-end md:w-full">
+              <div className="m-8 md:m-4 bg-black bg-opacity-80 border border-white border-opacity-50 rounded-full p-8 max-w-xs md:justify-self-end md:w-full">
                 <h1 className="text-white text-xl">Понеделник - Събота</h1>
                 <p className="text-primary text-md">10:00 - 20:00</p>
               </div>
-              <div className="m-8 md:m-4 bg-black bg-opacity-80 border border-white border-opacity-50 rounded-lg p-8 max-w-xs md:justify-self-start md:w-full">
+              <div className="m-8 md:m-4 bg-black bg-opacity-80 border border-white border-opacity-50 rounded-full p-8 max-w-xs md:justify-self-start md:w-full">
                 <h1 className="text-white text-xl">Неделя</h1>
                 <p className="text-primary text-md">Почивка</p>
               </div>
