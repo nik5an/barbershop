@@ -18,6 +18,7 @@ import { Button } from "./ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
+import SignInForm from "./form/SignInForm";
 
 const BookAppointment = () => {
   const tomorrow = new Date();
@@ -91,73 +92,77 @@ const BookAppointment = () => {
       <DialogTrigger className="mt-6 px-6 py-3 bg-primary text-xl text-black rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
         Запази час
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
+      {!session?.user ? (
+        <DialogContent>
           <DialogTitle className="mx-auto text-xl font-normal">
-            Избор на време
+            Моля влезнете в профила си за да продължите
           </DialogTitle>
-          <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 mt-5">
-              <div className="flex flex-col gap-3 items-baseline">
-                <h2 className="flex gap-2 text-xl">
-                  <MdOutlineCalendarMonth className="text-2xl" />
-                  Изберете дата
-                </h2>
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  disabled={isPast}
-                  className="rounded-md border"
-                />
-              </div>
-              <div className="mt-1">
-                <h2 className="flex gap-2 text-xl">
-                  <CiClock1 className="text-2xl" />
-                  Изберете час
-                </h2>
-                <div className="grid grid-cols-3 gap-2 border rounded-lg p-4 mt-2">
-                  {timeSlot.map((item, index) => (
-                    <h2
-                      key={index}
-                      onClick={() => setSelectedTimeSlot(item.time)}
-                      className={`p-2 border rounded-full text-center hover:bg-black hover:text-white cursor-pointer 
+          <SignInForm></SignInForm>
+        </DialogContent>
+      ) : (
+        <DialogContent className="max-w-2xl overflow-y-scroll max-h-screen">
+          <DialogHeader>
+            <DialogTitle className="mx-auto text-xl font-normal">
+              Избор на време
+            </DialogTitle>
+            <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 mt-5">
+                <div className="flex flex-col gap-3 items-baseline">
+                  <h2 className="flex gap-2 text-xl">
+                    <MdOutlineCalendarMonth className="text-2xl" />
+                    Изберете дата
+                  </h2>
+                  <div className="flex justify-center mx-auto">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                      disabled={isPast}
+                      className="rounded-md border"
+                    />
+                  </div>
+                </div>
+                <div className="mt-1">
+                  <h2 className="flex gap-2 text-xl">
+                    <CiClock1 className="text-2xl" />
+                    Изберете час
+                  </h2>
+                  <div className="grid grid-cols-3 gap-2 border rounded-lg p-4 mt-2">
+                    {timeSlot.map((item, index) => (
+                      <h2
+                        key={index}
+                        onClick={() => setSelectedTimeSlot(item.time)}
+                        className={`p-2 border rounded-full text-center hover:bg-black hover:text-white cursor-pointer 
                       ${
                         item.time == selectedTimeSlot && "bg-black text-white"
                       }`}
-                    >
-                      {item.time}
-                    </h2>
-                  ))}
+                      >
+                        {item.time}
+                      </h2>
+                    ))}
+                  </div>
                 </div>
               </div>
+              <Textarea
+                placeholder="Бележка (незадължително)"
+                className="mt-2"
+                onChange={(e) => setNote(e.target.value)}
+              ></Textarea>
             </div>
-            <Textarea
-              placeholder="Бележка (незадължително)"
-              className="mt-2"
-              onChange={(e) => setNote(e.target.value)}
-            ></Textarea>
-          </div>
-        </DialogHeader>
-        <DialogFooter className="sm:justify-end">
-          <DialogClose asChild>
-            <>
-              <DialogTrigger>
-                <Button type="button" variant={"secondary"}>
-                  Затвори
-                </Button>
-              </DialogTrigger>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-end">
+            <DialogClose asChild>
               <Button
                 type="button"
                 disabled={!(date && selectedTimeSlot)}
                 onClick={() => saveBooking()}
               >
-                Запази
+                Запази час
               </Button>
-            </>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      )}
     </Dialog>
   );
 };

@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="bg-black text-white py-8 px-4">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
         <div className="flex flex-col md:flex-row gap-4">
-          <span>&copy; 2024 Barbershop</span>
+          <span>&copy; 2024 Relax Barbershop</span>
           <a href="/privacy-policy" className="hover:underline">
             Privacy Policy
           </a>
