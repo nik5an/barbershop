@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -10,7 +11,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Calendar } from "@/components/ui/calendar";
-import { useEffect, useState } from "react";
 import { CiClock1 } from "react-icons/ci";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { isPast } from "date-fns";
@@ -25,12 +25,14 @@ const BookAppointment = () => {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   const [date, setDate] = useState<Date | undefined>(tomorrow);
-  const [timeSlot, setTimeSlot] = useState<{ time: string }[]>([]);
+  const [timeSlots, setTimeSlots] = useState<
+    { time: string; available: boolean }[]
+  >([]);
   const [myNote, setNote] = useState("");
-  const { toast } = useToast();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<
     string | undefined
   >();
+  const { toast } = useToast();
   const { data: session } = useSession();
   const temp = session?.user.id?.toString();
   const userId = temp ? parseInt(temp) : undefined;
@@ -38,29 +40,65 @@ const BookAppointment = () => {
     date && selectedTimeSlot
       ? new Date(
           date.setHours(
-            parseInt(selectedTimeSlot.split(":")[0]) + 3,
+            parseInt(selectedTimeSlot.split(":")[0]),
             parseInt(selectedTimeSlot.split(":")[1])
           )
         )
       : null;
-  useEffect(() => {
-    getTime();
-  }, []);
 
-  const getTime = () => {
-    const timeList = [];
-    for (let i = 10; i <= 18; i++) {
-      timeList.push({
-        time: `${i}:00`,
-      });
-      timeList.push({
-        time: `${i}:30`,
+  useEffect(() => {
+    if (date) {
+      getTime();
+    }
+  }, [date]);
+
+  const getTime = async () => {
+    // Ensure date is defined before making the request
+    if (!date) return;
+
+    try {
+      // Adjust the date to the server's time zone without converting to UTC
+      const timeZoneOffset = date.getTimezoneOffset();
+      const timeZoneDate = new Date(date.getTime() - timeZoneOffset * 60000);
+
+      const formattedDate = timeZoneDate.toISOString().split("T")[0]; // Extract YYYY-MM-DD
+      const response = await fetch(`/api/getBookedSlots?date=${formattedDate}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch booked slots");
+      }
+      const bookedSlots = await response.json();
+
+      const timeList = [];
+      for (let i = 10; i <= 18; i++) {
+        const time = `${i < 10 ? "0" + i : i}:00`;
+        const available = !bookedSlots.includes(time);
+        timeList.push({
+          time,
+          available,
+        });
+        if (i !== 18) {
+          const halfHourTime = `${i < 10 ? "0" + i : i}:30`;
+          const halfHourAvailable = !bookedSlots.includes(halfHourTime);
+          timeList.push({
+            time: halfHourTime,
+            available: halfHourAvailable,
+          });
+        }
+      }
+      setTimeSlots(timeList);
+    } catch (error) {
+      console.error("Error fetching booked slots:", error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch booked slots",
+        variant: "destructive",
       });
     }
-    setTimeSlot(timeList);
   };
 
   const saveBooking = async () => {
+    if (!date || !selectedTimeSlot || !userId) return;
+
     const response = await fetch("/api/appointment", {
       method: "POST",
       headers: {
@@ -79,6 +117,7 @@ const BookAppointment = () => {
         description: "Вие успешно запазихте час.",
         variant: "success",
       });
+      getTime();
     } else {
       toast({
         title: "Error",
@@ -87,6 +126,7 @@ const BookAppointment = () => {
       });
     }
   };
+
   return (
     <Dialog>
       <DialogTrigger className="mt-6 px-6 py-3 bg-primary text-xl text-black rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
@@ -128,14 +168,19 @@ const BookAppointment = () => {
                     Изберете час
                   </h2>
                   <div className="grid grid-cols-3 gap-2 border rounded-lg p-4 mt-2">
-                    {timeSlot.map((item, index) => (
+                    {timeSlots.map((item, index) => (
                       <h2
                         key={index}
-                        onClick={() => setSelectedTimeSlot(item.time)}
-                        className={`p-2 border rounded-full text-center hover:bg-black hover:text-white cursor-pointer 
-                      ${
-                        item.time == selectedTimeSlot && "bg-black text-white"
-                      }`}
+                        onClick={() =>
+                          item.available && setSelectedTimeSlot(item.time)
+                        }
+                        className={`p-2 border rounded-full text-center hover:bg-black hover:text-white cursor-pointer ${
+                          !item.available &&
+                          "bg-gray-300 text-gray-600 hover:bg-gray-300 hover:text-gray-600 cursor-default"
+                        } ${
+                          item.time === selectedTimeSlot &&
+                          "bg-black text-white"
+                        }`}
                       >
                         {item.time}
                       </h2>
