@@ -49,19 +49,19 @@ const BookAppointment = () => {
   useEffect(() => {
     if (date) {
       getTime();
+    } else {
+      setTimeSlots([]);
     }
   }, [date]);
 
   const getTime = async () => {
-    // Ensure date is defined before making the request
     if (!date) return;
 
     try {
-      // Adjust the date to the server's time zone without converting to UTC
       const timeZoneOffset = date.getTimezoneOffset();
       const timeZoneDate = new Date(date.getTime() - timeZoneOffset * 60000);
 
-      const formattedDate = timeZoneDate.toISOString().split("T")[0]; // Extract YYYY-MM-DD
+      const formattedDate = timeZoneDate.toISOString().split("T")[0];
       const response = await fetch(`/api/getBookedSlots?date=${formattedDate}`);
       if (!response.ok) {
         throw new Error("Failed to fetch booked slots");
@@ -117,6 +117,7 @@ const BookAppointment = () => {
         description: "Вие успешно запазихте час.",
         variant: "success",
       });
+
       getTime();
     } else {
       toast({
@@ -162,31 +163,37 @@ const BookAppointment = () => {
                     />
                   </div>
                 </div>
-                <div className="mt-1">
-                  <h2 className="flex gap-2 text-xl">
-                    <CiClock1 className="text-2xl" />
-                    Изберете час
-                  </h2>
-                  <div className="grid grid-cols-3 gap-2 border rounded-lg p-4 mt-2">
-                    {timeSlots.map((item, index) => (
-                      <h2
-                        key={index}
-                        onClick={() =>
-                          item.available && setSelectedTimeSlot(item.time)
-                        }
-                        className={`p-2 border rounded-full text-center hover:bg-black hover:text-white cursor-pointer ${
-                          !item.available &&
-                          "bg-gray-300 text-gray-600 hover:bg-gray-300 hover:text-gray-600 cursor-default"
-                        } ${
-                          item.time === selectedTimeSlot &&
-                          "bg-black text-white"
-                        }`}
-                      >
-                        {item.time}
-                      </h2>
-                    ))}
+                {date && (
+                  <div className="mt-1">
+                    <h2 className="flex gap-2 text-xl">
+                      <CiClock1 className="text-2xl" />
+                      Изберете час
+                    </h2>
+                    <div className="grid grid-cols-3 gap-2 border rounded-lg p-4 mt-2">
+                      {timeSlots.map((item, index) => (
+                        <h2
+                          key={index}
+                          onClick={() => {
+                            if (selectedTimeSlot === item.time) {
+                              setSelectedTimeSlot(undefined);
+                            } else if (item.available) {
+                              setSelectedTimeSlot(item.time);
+                            }
+                          }}
+                          className={`p-2 border rounded-full text-center hover:bg-black hover:text-white cursor-pointer ${
+                            !item.available &&
+                            "bg-gray-300 text-gray-600 hover:bg-gray-300 hover:text-gray-600 cursor-default"
+                          } ${
+                            item.time === selectedTimeSlot &&
+                            "bg-black text-white"
+                          }`}
+                        >
+                          {item.time}
+                        </h2>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
               <Textarea
                 placeholder="Бележка (незадължително)"
