@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import SignUpForm from "./SignUpForm";
+import SignUpForm from "./signUpForm";
 
 const FormSchema = z.object({
   email: z

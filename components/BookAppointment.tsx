@@ -10,6 +10,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import { Calendar } from "@/components/ui/calendar";
 import { CiClock1 } from "react-icons/ci";
 import { MdOutlineCalendarMonth } from "react-icons/md";
@@ -19,6 +31,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
 import SignInForm from "./form/signInForm";
+import { CiStickyNote } from "react-icons/ci";
 
 const BookAppointment = () => {
   const tomorrow = new Date();
@@ -207,13 +220,58 @@ const BookAppointment = () => {
           </DialogHeader>
           <DialogFooter className="sm:justify-end">
             <DialogClose asChild>
-              <Button
-                type="button"
-                disabled={!(date && selectedTimeSlot)}
-                onClick={() => saveBooking()}
-              >
-                Запази час
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger
+                  type="button"
+                  disabled={!(date && selectedTimeSlot)}
+                  className="bg-black text-white rounded-lg p-2 text-sm"
+                >
+                  Запази час
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="font-normal text-lg text-black">
+                      Сигурни ли сте, че искате да запазите този час
+                    </AlertDialogTitle>
+                    {dateTime && (
+                      <AlertDialogDescription>
+                        <h2 className="flex gap-2 text-lg">
+                          <MdOutlineCalendarMonth className="text-2xl" />
+                          {dateTime.getDate()}.{dateTime.getMonth() + 1}.
+                          {dateTime.getFullYear()}
+                        </h2>
+                        <h2 className="flex gap-2 text-lg">
+                          <CiClock1 className="text-2xl" />
+                          {selectedTimeSlot}
+                        </h2>
+                        {myNote && (
+                          <h2 className="flex gap-2 text-lg">
+                            <CiStickyNote className="text-2xl" />
+                            {myNote}
+                          </h2>
+                        )}
+                        <h2 className="flex gap-2 text-lg text-black">
+                          Политика за анулиране на час:
+                        </h2>
+                        <h2 className="flex gap-2 text-base">
+                          Моля не анулирайте запазен час в рамките на 3 часа до
+                          него.
+                        </h2>
+                      </AlertDialogDescription>
+                    )}
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Не</AlertDialogCancel>
+                    <AlertDialogAction
+                      type="button"
+                      disabled={!(date && selectedTimeSlot)}
+                      onClick={() => saveBooking()}
+                    >
+                      Да
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </DialogClose>
           </DialogFooter>
         </DialogContent>
