@@ -7,7 +7,7 @@ import { IoIosClose } from "react-icons/io";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { Link as ScrollLink } from "react-scroll";
 import { useSession } from "next-auth/react";
-import UserAccountNav from "./UserAccountNav";
+import UserAccountNav from "./userAccountNav";
 import {
   Dialog,
   DialogContent,
@@ -16,7 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import SignInForm from "./form/SignInForm";
+import SignInForm from "./form/signInForm";
 import { MdManageAccounts } from "react-icons/md";
 
 const links = [
@@ -91,6 +91,7 @@ const MyNavbar = () => {
                       {session?.user.email === "asd@gmail.com" ? (
                         <Link href={"/admin"}>Admin</Link>
                       ) : null}
+                      <Link href={"/my-booking"}>Моите часове</Link>
                       <UserAccountNav />
                     </>
                   ) : (

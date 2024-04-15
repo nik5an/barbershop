@@ -18,7 +18,7 @@ import { Button } from "./ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
-import SignInForm from "./form/SignInForm";
+import SignInForm from "./form/signInForm";
 
 const BookAppointment = () => {
   const tomorrow = new Date();
@@ -52,6 +52,7 @@ const BookAppointment = () => {
     } else {
       setTimeSlots([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
   const getTime = async () => {
@@ -62,7 +63,9 @@ const BookAppointment = () => {
       const timeZoneDate = new Date(date.getTime() - timeZoneOffset * 60000);
 
       const formattedDate = timeZoneDate.toISOString().split("T")[0];
-      const response = await fetch(`/api/getBookedSlots?date=${formattedDate}`);
+      const response = await fetch(
+        `/api/appointment/getBookedSlots?date=${formattedDate}`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch booked slots");
       }
