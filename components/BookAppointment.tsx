@@ -31,6 +31,7 @@ import { useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
 import SignInForm from "./form/signInForm";
 import { CiStickyNote } from "react-icons/ci";
+import Link from "next/link";
 
 const BookAppointment = () => {
   const tomorrow = new Date();
@@ -129,8 +130,15 @@ const BookAppointment = () => {
     if (response.ok) {
       toast({
         title: "Success",
-        description:
-          "Вие успешно запазихте час. Може да си видите часа от Профил -> Моите часове.",
+        description: (
+          <>
+            Вие успешно запазихте час. Може да си видите часа от Профил -&gt;
+            Моите часове или като цъкнете{" "}
+            <Link href="/my-booking" className="text-black hover:underline">
+              тук
+            </Link>
+          </>
+        ),
         variant: "success",
       });
 
@@ -237,28 +245,28 @@ const BookAppointment = () => {
                     </AlertDialogTitle>
                     {dateTime && (
                       <AlertDialogDescription>
-                        <h2 className="flex gap-2 text-lg">
+                        <p className="flex gap-2 text-lg">
                           <MdOutlineCalendarMonth className="text-2xl" />
                           {dateTime.getDate()}.{dateTime.getMonth() + 1}.
                           {dateTime.getFullYear()}
-                        </h2>
-                        <h2 className="flex gap-2 text-lg">
+                        </p>
+                        <p className="flex gap-2 text-lg">
                           <CiClock1 className="text-2xl" />
                           {selectedTimeSlot}
-                        </h2>
+                        </p>
                         {myNote && (
-                          <h2 className="flex gap-2 text-lg">
+                          <p className="flex gap-2 text-lg">
                             <CiStickyNote className="text-2xl" />
                             {myNote}
-                          </h2>
+                          </p>
                         )}
-                        <h2 className="flex gap-2 text-lg text-black">
+                        <p className="flex gap-2 text-lg text-black">
                           Политика за анулиране на час:
-                        </h2>
-                        <h2 className="flex gap-2 text-base">
+                        </p>
+                        <p className="flex gap-2 text-base">
                           Моля не анулирайте запазен час в рамките на 3 часа до
                           него.
-                        </h2>
+                        </p>
                       </AlertDialogDescription>
                     )}
                   </AlertDialogHeader>

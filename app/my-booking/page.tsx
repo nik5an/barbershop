@@ -114,7 +114,9 @@ const MyBooking = () => {
 
   return (
     <>
-      <MyNavbar />
+      <div className="bg-neutral">
+        <MyNavbar />
+      </div>
       <div className="px-4 sm:px-10 mt-10">
         <h2 className="font-bold text-2xl">Моите часове</h2>
         <Tabs defaultValue="upcoming" className="w-full">

@@ -14,26 +14,25 @@ const mapsLocation =
 
 export default function Home() {
   return (
-    <div className="relative" id="hero">
-      <div>
+    <div className="relative">
+      <div id="hero">
         <div
           className="bg-cover bg-center"
           style={{ backgroundImage: `url(${BG})` }}
         >
           <MyNavbar />
           <div className="text-white py-4 md:py-24">
-            <div className="bg-black bg-opacity-50 rounded-lg py-4 md:py-20 text-center max-w-3xl mx-auto">
-              <h1 className="text-5xl lg:text-8xl lg:mt-0 outline-2 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] p-2">
+            <div className="bg-black bg-opacity-50 rounded-lg py-4 md:py-20 text-center max-w-3xl mx-auto my-36 md:my-8 border-white border">
+              <h1 className="text-5xl md:text-6xl lg:text-8xl lg:mt-0 outline-2 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] ">
                 RELAX BARBERSHOP
               </h1>
-              <p className="mt-4 text-lg lg:text-2xl leading-none lg:leading-normal drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
-                Първокачествено обслужване в уникална атмосфера
+              <p className="mt-4 text-lg lg:text-2xl leading-none lg:leading-normal drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] max-w-xs lg:max-w-full mx-auto">
+                Обслужване от първокачествено ниво в изключителна обстановка.
               </p>
               <p className="mt-4 text-sm lg:text-lg leading-none lg:leading-normal max-w-xs lg:max-w-lg mx-auto drop-shadow-[0_1.5px_1.5px_rgba(0,0,0,0.8)] mb-12 lg:mb-0">
-                Помагаме ти да поддържаш брадата си и винаги да изглеждаш в
-                най-добър вид. Ела в бръснарницата ни в Пловдив и опитай.
+                Ела в бръснарницата и опитай.
               </p>
-              <div className="mt-12 lg:mt-2">
+              <div className="mt-6 lg:mt-2">
                 <BookAppointment></BookAppointment>
               </div>
             </div>
@@ -43,7 +42,7 @@ export default function Home() {
 
       <div className="mx-auto text-center my-8" id="services">
         <h1 className="text-4xl font-bold">Услуги</h1>
-        <div className="grid grid-cols-1 lg:grid-cols-4 m-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 m-4">
           <div>
             <div className="w-48 h-48 flex items-center mx-auto my-8">
               <Image
@@ -107,16 +106,18 @@ export default function Home() {
           className="bg-cover bg-center bg-fixed "
           style={{ backgroundImage: `url(${BG1})` }}
         >
-          <div className="bg-black bg-opacity-70 text-center py-12">
+          <div className="bg-black bg-opacity-70 text-center py-12 ">
             <h1 className="text-3xl text-white">Работно време</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2">
-              <div className="m-8 md:m-4 bg-black bg-opacity-80 border border-white border-opacity-50 rounded-full p-8 max-w-xs md:justify-self-end md:w-full">
-                <h1 className="text-white text-xl">Понеделник - Събота</h1>
-                <p className="text-primary text-md">10:00 - 20:00</p>
-              </div>
-              <div className="m-8 md:m-4 bg-black bg-opacity-80 border border-white border-opacity-50 rounded-full p-8 max-w-xs md:justify-self-start md:w-full">
-                <h1 className="text-white text-xl">Неделя</h1>
-                <p className="text-primary text-md">Почивка</p>
+            <div className="flex justify-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 ">
+                <div className="m-8 md:m-4 bg-black bg-opacity-80 border border-white border-opacity-50 rounded-full p-8 max-w-xs md:justify-self-end md:w-full">
+                  <h1 className="text-white text-xl">Понеделник - Събота</h1>
+                  <p className="text-primary text-md">10:00 - 20:00</p>
+                </div>
+                <div className="m-8 md:m-4 bg-black bg-opacity-80 border border-white border-opacity-50 rounded-full p-8 max-w-xs md:justify-self-start md:w-full">
+                  <h1 className="text-white text-xl">Неделя</h1>
+                  <p className="text-primary text-md">Почивка</p>
+                </div>
               </div>
             </div>
           </div>
@@ -129,14 +130,15 @@ export default function Home() {
         <div className="flex flex-col items-center text-center">
           <h2 className="text-4xl font-bold">За нас</h2>
           <p className="mt-4 text-xl leading-6 max-w-md mx-auto">
-            Бръснарницата отваря врати през 2015-та година в сърцето на Пловдив
-            и вече 7 години предоставя на своите клиенти първокачествено
-            обслужване в уникална атмосфера. С времето се превръща в еталон за
-            качествено обслужване и професионализъм.
+            Бръснарницата отваря през 2020-та година в Калековец и вече 4 години
+            се грижим за вашата визия с опит и усмивка. Предлагаме високо
+            качество на услугите за подстригване и бръснене в уютна обстановка.
+            Очакваме да ви посрещнем и да ви покажем защо сме вашият избор за
+            грижа за визията.
           </p>
           <div className="mt-6">
             <h3 className="text-3xl font-bold">Адрес</h3>
-            <p className="mt-2 text-xl">Пловдив ул. Улица 1</p>
+            <p className="mt-2 text-xl">Калековец ул. Улица 1</p>
           </div>
           <div className="mt-6">
             <h3 className="text-3xl font-bold">Телефон</h3>

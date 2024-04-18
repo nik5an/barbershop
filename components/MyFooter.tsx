@@ -16,10 +16,10 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row gap-4">
           <span>&copy; 2024 Relax Barbershop</span>
           <a href="/privacy-policy" className="hover:underline">
-            Privacy Policy
+            Политика за поверителност
           </a>
           <a href="/terms-of-service" className="hover:underline">
-            Terms of Service
+            Условия за ползване
           </a>
         </div>
         <div className="flex gap-4 mt-4 md:mt-0">
