@@ -1,12 +1,17 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter, Orelega_One } from "next/font/google";
+import { Inter, Orelega_One, Roboto_Slab } from "next/font/google";
 import SessionWrapper from "@/components/sessionWrapper";
 import { Toaster } from "@/components/ui/toaster";
 
 const orelega_One = Orelega_One({
   subsets: ["latin"],
   weight: "400",
+});
+
+const anton = Roboto_Slab({
+  subsets: ["latin"],
+  weight: "500",
 });
 
 const inter = Inter({ subsets: ["latin"] });
@@ -27,7 +32,9 @@ export default function RootLayout({
           <link rel="icon" href="/favicon.ico" />
         </head>
 
-        <body className={(inter.className, orelega_One.className)}>
+        <body
+          className={(inter.className, orelega_One.className, anton.className)}
+        >
           <main>{children}</main>
           <Toaster></Toaster>
         </body>

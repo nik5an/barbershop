@@ -147,7 +147,7 @@ const BookAppointment = () => {
   return (
     <Dialog>
       <DialogTrigger className="mt-6 px-6 py-3 bg-primary text-xl text-black rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
-        Запази час
+        ЗАПАЗИ ЧАС
       </DialogTrigger>
       {!session?.user ? (
         <DialogContent>
@@ -157,7 +157,7 @@ const BookAppointment = () => {
           <SignInForm></SignInForm>
         </DialogContent>
       ) : (
-        <DialogContent className="max-w-2xl overflow-y-scroll max-h-screen">
+        <DialogContent className="max-w-2xl overflow-y-scroll max-h-screen ">
           <DialogHeader>
             <DialogTitle className="mx-auto text-xl font-normal">
               Избор на време

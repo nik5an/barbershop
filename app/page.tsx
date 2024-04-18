@@ -22,16 +22,20 @@ export default function Home() {
         >
           <MyNavbar />
           <div className="text-white py-4 md:py-24">
-            <div className="bg-black bg-opacity-40 rounded-lg py-4 md:py-20 text-center max-w-3xl mx-auto">
-              <h1 className="text-5xl lg:text-8xl lg:mt-0">RELAX BARBERSHOP</h1>
-              <p className="mt-4 text-lg lg:text-2xl leading-none lg:leading-normal">
+            <div className="bg-black bg-opacity-50 rounded-lg py-4 md:py-20 text-center max-w-3xl mx-auto">
+              <h1 className="text-5xl lg:text-8xl lg:mt-0 outline-2 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] p-2">
+                RELAX BARBERSHOP
+              </h1>
+              <p className="mt-4 text-lg lg:text-2xl leading-none lg:leading-normal drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
                 Първокачествено обслужване в уникална атмосфера
               </p>
-              <p className="mt-4 text-sm lg:text-lg leading-none lg:leading-normal max-w-lg mx-auto">
+              <p className="mt-4 text-sm lg:text-lg leading-none lg:leading-normal max-w-xs lg:max-w-lg mx-auto drop-shadow-[0_1.5px_1.5px_rgba(0,0,0,0.8)] mb-12 lg:mb-0">
                 Помагаме ти да поддържаш брадата си и винаги да изглеждаш в
                 най-добър вид. Ела в бръснарницата ни в Пловдив и опитай.
               </p>
-              <BookAppointment></BookAppointment>
+              <div className="mt-12 lg:mt-2">
+                <BookAppointment></BookAppointment>
+              </div>
             </div>
           </div>
         </div>
@@ -136,7 +140,7 @@ export default function Home() {
           </div>
           <div className="mt-6">
             <h3 className="text-3xl font-bold">Телефон</h3>
-            <p className="mt-2 text-xl">0886 800 008</p>
+            <p className="mt-2 text-xl">+359 886 800 008</p>
           </div>
         </div>
         <div className="rounded-lg shadow-lg aspect-w-3 aspect-h-2 mt-4 min-h-96">

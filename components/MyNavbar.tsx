@@ -30,12 +30,16 @@ const MyNavbar = () => {
   const { data: session } = useSession();
 
   return (
-    <nav className="bg-black bg-opacity-30">
-      <div className="navbar max-w-5xl mx-auto flex-col md:flex-row justify-between relative">
-        <div className="flex justify-center md:justify-start">
+    <nav className="bg-black bg-opacity-50 ">
+      <div className="navbar max-w-full lg:max-w-5xl mx-auto flex-col md:flex-row justify-between relative">
+        <div
+          className={`flex justify-start lg:ml-12 sm:transition-all sm:ease-in ${
+            open ? "" : "sm:transform sm:-translate-x-24 sm:translate"
+          }`}
+        >
           <Link href="/" className="btn btn-primary rounded-lg">
             <div className="w-40 h-18">
-              <Image src={logo} alt="logo" width={500} height={500}></Image>
+              <Image src={logo} alt="logo" width={500} height={500} />
             </div>
           </Link>
         </div>
@@ -59,7 +63,7 @@ const MyNavbar = () => {
                 smooth={true}
                 offset={-70}
                 duration={500}
-                className="capitalize text-2xl text-white focus:text-white cursor-pointer"
+                className="capitalize text-2xl text-white focus:text-white cursor-pointer drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"
               >
                 {link.label}
               </ScrollLink>
