@@ -26,7 +26,6 @@ import { Calendar } from "@/components/ui/calendar";
 import { CiClock1 } from "react-icons/ci";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { isPast } from "date-fns";
-import { Button } from "./ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
@@ -130,7 +129,8 @@ const BookAppointment = () => {
     if (response.ok) {
       toast({
         title: "Success",
-        description: "Вие успешно запазихте час.",
+        description:
+          "Вие успешно запазихте час. Може да си видите часа от Профил -> Моите часове.",
         variant: "success",
       });
 
@@ -196,11 +196,13 @@ const BookAppointment = () => {
                               setSelectedTimeSlot(item.time);
                             }
                           }}
-                          className={`p-2 border rounded-full text-center hover:bg-black hover:text-white cursor-pointer ${
-                            !item.available &&
-                            "bg-gray-300 text-gray-600 hover:bg-gray-300 hover:text-gray-600 cursor-default"
+                          className={`p-2 border rounded-full text-center ${
+                            !item.available
+                              ? "bg-gray-300 text-gray-600 cursor-default"
+                              : "cursor-pointer hover:bg-black hover:text-white"
                           } ${
                             item.time === selectedTimeSlot &&
+                            item.available &&
                             "bg-black text-white"
                           }`}
                         >
@@ -224,7 +226,7 @@ const BookAppointment = () => {
                 <AlertDialogTrigger
                   type="button"
                   disabled={!(date && selectedTimeSlot)}
-                  className="bg-black text-white rounded-lg p-2 text-sm"
+                  className="bg-black text-white rounded-lg p-3 text-base"
                 >
                   Запази час
                 </AlertDialogTrigger>
@@ -261,13 +263,13 @@ const BookAppointment = () => {
                     )}
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Не</AlertDialogCancel>
+                    <AlertDialogCancel>Затвори</AlertDialogCancel>
                     <AlertDialogAction
                       type="button"
                       disabled={!(date && selectedTimeSlot)}
                       onClick={() => saveBooking()}
                     >
-                      Да
+                      Продължи
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>

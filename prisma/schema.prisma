@@ -11,6 +11,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  
 }
 
 model User {
@@ -28,7 +29,7 @@ model Appointments {
   id       Int      @id @default(autoincrement())
   datetime DateTime
   note String
-    createdAt DateTime @default(now())
+  createdAt DateTime @default(now())
   user     User     @relation(fields: [uId], references: [id])
   uId Int
 }

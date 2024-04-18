@@ -10,7 +10,7 @@ const AdminPage = async () => {
       <div>
         <MyNavbar />
         <h2 className="text-2xl flex justify-center items-center h-screen">
-          Admin page - welcome, {session?.user.fname}
+          Admin page - welcome, {session?.user.fname} {session.user.id}
         </h2>
       </div>
     );
