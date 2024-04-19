@@ -18,9 +18,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { CiClock1 } from "react-icons/ci";
 import { CiStickyNote } from "react-icons/ci";
 import { MdOutlineCalendarMonth } from "react-icons/md";
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
+import { IoPersonOutline } from "react-icons/io5";
 
 const AdminPage = () => {
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
@@ -70,6 +69,7 @@ const AdminPage = () => {
         }
         const expiredData = await expiredResponse.json();
         setExpiredBookings(expiredData);
+        console.log(upcomingData);
 
         setLoading(false);
       } catch (error: any) {
@@ -179,6 +179,11 @@ const AdminPage = () => {
                             {booking.note}
                           </h2>
                         )}
+                        <h2 className="flex gap-2 text-lg">
+                          <IoPersonOutline className="text-2xl" />
+                          Иван Торуманов, 0887234755,
+                          {booking.uId}
+                        </h2>
                       </div>
                     </div>
                   ))}

@@ -20,7 +20,29 @@ export async function GET() {
         datetime: "asc",
       },
     });
-    return NextResponse.json(upcomingBookings, { status: 200 });
+
+    const bookingIds = upcomingBookings.map((booking) => booking.uId);
+
+    const bookingUsers = await db.user.findMany({
+      where: {
+        id: {
+          in: bookingIds,
+        },
+      },
+    });
+
+    const responseData = {
+      upcomingBookings: upcomingBookings,
+      bookingUsers: bookingUsers,
+    };
+
+    return NextResponse.json(
+      {
+        upcomingBookings: upcomingBookings,
+        bookingUsers: bookingUsers,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error fetching upcoming bookings:", error);
     return NextResponse.json(
