@@ -187,6 +187,16 @@ const AdminPage = () => {
                             bookingUsers.find((user) => user.id === booking.uId)
                               .fname
                           }
+                          &nbsp;
+                          {
+                            bookingUsers.find((user) => user.id === booking.uId)
+                              .lname
+                          }
+                          ,&nbsp;
+                          {
+                            bookingUsers.find((user) => user.id === booking.uId)
+                              .number
+                          }
                         </h2>
                       </div>
                     </div>

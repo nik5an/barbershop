@@ -23,7 +23,7 @@ export default function Home() {
           <MyNavbar />
           <div className="text-white py-4 md:py-24">
             <div className="bg-black bg-opacity-50 rounded-lg py-4 md:py-20 text-center max-w-3xl mx-auto my-36 md:my-8 border-white border">
-              <h1 className="text-5xl md:text-6xl lg:text-8xl lg:mt-0 outline-2 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] ">
+              <h1 className="text-5xl md:text-6xl lg:text-8xl lg:mt-0 outline-2 drop-shadow-[0_5.2px_1.2px_rgba(0,0,0,0.8)] ">
                 RELAX BARBERSHOP
               </h1>
               <p className="mt-4 text-lg lg:text-2xl leading-none lg:leading-normal drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] max-w-xs lg:max-w-full mx-auto">
