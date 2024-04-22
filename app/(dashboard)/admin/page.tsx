@@ -23,6 +23,7 @@ import { IoPersonOutline } from "react-icons/io5";
 
 const AdminPage = () => {
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
+  const [bookingUsers, setBookingUsers] = useState<any[]>([]);
   const [expiredBookings, setExpiredBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -59,7 +60,8 @@ const AdminPage = () => {
           throw new Error("Failed to fetch upcoming bookings.");
         }
         const upcomingData = await upcomingResponse.json();
-        setUpcomingBookings(upcomingData);
+        setUpcomingBookings(upcomingData.upcomingBookings);
+        setBookingUsers(upcomingData.bookingUsers);
 
         const expiredResponse = await fetch(`/api/appointment/getAllExpired`, {
           method: "GET",
@@ -181,8 +183,10 @@ const AdminPage = () => {
                         )}
                         <h2 className="flex gap-2 text-lg">
                           <IoPersonOutline className="text-2xl" />
-                          Иван Торуманов, 0887234755,
-                          {booking.uId}
+                          {
+                            bookingUsers.find((user) => user.id === booking.uId)
+                              .fname
+                          }
                         </h2>
                       </div>
                     </div>
