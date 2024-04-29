@@ -10,6 +10,15 @@ import { Link as ScrollLink } from "react-scroll";
 import { useSession } from "next-auth/react";
 import UserAccountNav from "./userAccountNav";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -72,49 +81,58 @@ const MyNavbar = () => {
             ))}
 
           <li className="relative ml-2">
-            <div className="dropdown p-0">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn m-1 bg-black bg-opacity-80"
-              >
-                <div className="flex items-center justify-center w-12 h-12 text-4xl text-white ">
-                  {session?.user ? (
-                    <MdManageAccounts />
-                  ) : (
-                    <MdOutlineAccountCircle />
-                  )}
-                </div>
-              </div>
-              <ul
-                tabIndex={0}
-                className="dropdown-content z-[1] menu p-1 shadow bg-base-100 rounded-box w-22 absolute top-full -left-4 text-base max-w-full"
-              >
-                <li>
+            <Dialog>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="p-0" asChild>
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className="btn m-1 bg-black bg-opacity-80 px-5"
+                  >
+                    <div className="flex items-center justify-center w-12 h-12 text-4xl text-white ">
+                      {session?.user ? (
+                        <MdManageAccounts />
+                      ) : (
+                        <MdOutlineAccountCircle />
+                      )}
+                    </div>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel className="font-medium">
+                    Моят Профил
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
                   {session?.user ? (
                     <>
                       {session?.user.email === "asd@gmail.com" ? (
-                        <Link href={"/admin"}>Admin</Link>
+                        <DropdownMenuItem>
+                          <Link href={"/admin"}>Admin</Link>
+                        </DropdownMenuItem>
                       ) : null}
-                      <Link href={"/my-booking"}>Моите часове</Link>
-                      <UserAccountNav />
+                      <DropdownMenuItem>
+                        <Link href={"/my-booking"}>Моите часове</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <UserAccountNav />
+                      </DropdownMenuItem>
                     </>
                   ) : (
-                    <Dialog>
-                      <DialogTrigger className="w-20">Влез</DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle className="text-center font-normal">
-                            Логин
-                          </DialogTitle>
-                          <SignInForm></SignInForm>
-                        </DialogHeader>
-                      </DialogContent>
-                    </Dialog>
+                    <DialogTrigger className="w-20" asChild>
+                      <DropdownMenuItem>Влез</DropdownMenuItem>
+                    </DialogTrigger>
                   )}
-                </li>
-              </ul>
-            </div>
+                </DropdownMenuContent>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="text-center font-normal">
+                      Логин
+                    </DialogTitle>
+                    <SignInForm></SignInForm>
+                  </DialogHeader>
+                </DialogContent>
+              </DropdownMenu>
+            </Dialog>
           </li>
         </ul>
       </div>

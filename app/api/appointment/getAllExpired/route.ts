@@ -10,7 +10,7 @@ export async function GET() {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const upcomingBookings = await db.appointments.findMany({
+    const expiredBookings = await db.appointments.findMany({
       where: {
         datetime: {
           lt: new Date(),
@@ -20,11 +20,28 @@ export async function GET() {
         datetime: "desc",
       },
     });
-    return NextResponse.json(upcomingBookings, { status: 200 });
-  } catch (error) {
-    console.error("Error fetching expired bookings:", error);
+
+    const bookingIds = expiredBookings.map((booking) => booking.uId);
+
+    const bookingUsers = await db.user.findMany({
+      where: {
+        id: {
+          in: bookingIds,
+        },
+      },
+    });
+
     return NextResponse.json(
-      { message: "Failed to fetch expired bookings" },
+      {
+        expiredBookings: expiredBookings,
+        bookingUsers: bookingUsers,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error fetching upcoming bookings:", error);
+    return NextResponse.json(
+      { message: "Failed to fetch upcoming bookings" },
       { status: 500 }
     );
   }

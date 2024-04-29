@@ -31,11 +31,6 @@ export async function GET() {
       },
     });
 
-    const responseData = {
-      upcomingBookings: upcomingBookings,
-      bookingUsers: bookingUsers,
-    };
-
     return NextResponse.json(
       {
         upcomingBookings: upcomingBookings,

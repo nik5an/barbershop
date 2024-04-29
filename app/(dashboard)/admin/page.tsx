@@ -20,14 +20,20 @@ import { CiStickyNote } from "react-icons/ci";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { IoPersonOutline } from "react-icons/io5";
+import { useRouter } from "next/navigation";
 
 const AdminPage = () => {
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
   const [bookingUsers, setBookingUsers] = useState<any[]>([]);
+  const [bookingUsersExpired, setBookingUsersExpired] = useState<any[]>([]);
   const [expiredBookings, setExpiredBookings] = useState<any[]>([]);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
   const { toast } = useToast();
+  const { data: session } = useSession();
+  const user = session?.user;
 
   const formatDate = (datetimeString: string) => {
     const dateTime = new Date(datetimeString);
@@ -48,7 +54,16 @@ const AdminPage = () => {
     return dateTime.toLocaleString("bg-BG", options);
   };
   useEffect(() => {
+    const adminArray = ["2"];
+
     const fetchData = async () => {
+      if (user && adminArray.includes(user.id)) {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+        router.push("/");
+      }
+
       try {
         const upcomingResponse = await fetch(
           `/api/appointment/getAllUpcoming`,
@@ -70,8 +85,8 @@ const AdminPage = () => {
           throw new Error("Failed to fetch expired bookings.");
         }
         const expiredData = await expiredResponse.json();
-        setExpiredBookings(expiredData);
-        console.log(upcomingData);
+        setExpiredBookings(expiredData.expiredBookings);
+        setBookingUsersExpired(expiredData.bookingUsers);
 
         setLoading(false);
       } catch (error: any) {
@@ -82,7 +97,7 @@ const AdminPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [router, user]);
 
   const deleteBooking = async (bookingId: number) => {
     try {
@@ -113,15 +128,13 @@ const AdminPage = () => {
       });
     }
   };
-  const { data: session } = useSession();
 
-  if (session?.user.email === "asd@gmail.com") {
-    return (
-      <>
-        <div className="bg-neutral">
-          <MyNavbar />
-        </div>
-
+  return (
+    <>
+      <div className="bg-neutral">
+        <MyNavbar />
+      </div>
+      {isAdmin && (
         <div className="px-4 sm:px-10 mt-10">
           <h2 className="font-bold text-2xl">Всички часове</h2>
           <Tabs defaultValue="upcoming" className="w-full">
@@ -144,7 +157,7 @@ const AdminPage = () => {
                       <div className="flex flex-col gap-2 w-full">
                         <div className="flex justify-between items-center">
                           <h2 className="flex gap-2 text-lg">
-                            <MdOutlineCalendarMonth className="text-2xl" />
+                            <MdOutlineCalendarMonth className="text-2xl mt-1" />
                             {formatDate(booking.datetime)}
                           </h2>
                           <AlertDialog>
@@ -172,17 +185,17 @@ const AdminPage = () => {
                           </AlertDialog>
                         </div>
                         <h2 className="flex gap-2 text-lg">
-                          <CiClock1 className="text-2xl" />
+                          <CiClock1 className="text-2xl mt-0.5" />
                           {formatTime(booking.datetime)}
                         </h2>
                         {booking.note && (
                           <h2 className="flex gap-2 text-lg">
-                            <CiStickyNote className="text-2xl" />
+                            <CiStickyNote className="text-2xl mt-0.5" />
                             {booking.note}
                           </h2>
                         )}
                         <h2 className="flex gap-2 text-lg">
-                          <IoPersonOutline className="text-2xl" />
+                          <IoPersonOutline className="text-2xl mt-0.5" />
                           {
                             bookingUsers.find((user) => user.id === booking.uId)
                               .fname
@@ -209,20 +222,65 @@ const AdminPage = () => {
                       className="flex gap-2 items-center border p-3 m-3 rounded-lg"
                     >
                       <div className="flex flex-col gap-2 w-full">
+                        <div className="flex justify-between items-center">
+                          <h2 className="flex gap-2 text-lg">
+                            <MdOutlineCalendarMonth className="text-2xl mt-1" />
+                            {formatDate(booking.datetime)}
+                          </h2>
+                          <AlertDialog>
+                            <AlertDialogTrigger className="justify-end border rounded-lg p-2 hover:bg-slate-50">
+                              Изтрий часа
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle className="font-medium">
+                                  Сигурни ли сте
+                                </AlertDialogTitle>
+                                <AlertDialogDescription className="font-normal">
+                                  Това ще изтрие вашия час за винаги.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Затвори</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => deleteBooking(booking.id)}
+                                >
+                                  Продължи
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
                         <h2 className="flex gap-2 text-lg">
-                          <MdOutlineCalendarMonth className="text-2xl" />
-                          {formatDate(booking.datetime)}
-                        </h2>
-                        <h2 className="flex gap-2 text-lg">
-                          <CiClock1 className="text-2xl" />
+                          <CiClock1 className="text-2xl mt-0.5" />
                           {formatTime(booking.datetime)}
                         </h2>
                         {booking.note && (
                           <h2 className="flex gap-2 text-lg">
-                            <CiStickyNote className="text-2xl" />
+                            <CiStickyNote className="text-2xl mt-0.5" />
                             {booking.note}
                           </h2>
                         )}
+                        <h2 className="flex gap-2 text-lg">
+                          <IoPersonOutline className="text-2xl mt-0.5" />
+                          {
+                            bookingUsersExpired.find(
+                              (user) => user.id === booking.uId
+                            ).fname
+                          }
+                          &nbsp;
+                          {
+                            bookingUsersExpired.find(
+                              (user) => user.id === booking.uId
+                            ).lname
+                          }
+                          ,&nbsp;
+                          {
+                            bookingUsersExpired.find(
+                              (user) => user.id === booking.uId
+                            ).number
+                          }
+                        </h2>
                       </div>
                     </div>
                   ))}
@@ -231,16 +289,8 @@ const AdminPage = () => {
             )}
           </Tabs>
         </div>
-      </>
-    );
-  }
-  return (
-    <div>
-      <MyNavbar />
-      <h2 className="text-2xl flex justify-center items-center h-screen">
-        You don&apos;t have access to this page. Please return back.
-      </h2>
-    </div>
+      )}
+    </>
   );
 };
 
