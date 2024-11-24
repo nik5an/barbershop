@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import React, { useState, useEffect } from "react";
-import MyNavbar from "@/components/myNavbar";
+import MyNavbar from "@/components/MyNavbar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
 import { CiClock1 } from "react-icons/ci";

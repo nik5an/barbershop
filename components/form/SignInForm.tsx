@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import SignUpForm from "./signUpForm";
+import SignUpForm from "./SignUpForm";
 
 const FormSchema = z.object({
   email: z
@@ -49,11 +49,15 @@ const SignInForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    console.log("Form submitted", values);
     const signInData = await signIn("credentials", {
       email: values.email,
       password: values.password,
       redirect: false,
     });
+
+    console.log("signInData:", signInData);
+    router.refresh();
 
     if (signInData?.error) {
       toast({

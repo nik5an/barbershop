@@ -1,7 +1,7 @@
-import MyNavbar from "../components/myNavbar";
+import MyNavbar from "../components/MyNavbar";
 import Image from "next/image";
-import Footer from "../components/myFooter";
-import BookAppointment from "@/components/bookAppointment";
+import Footer from "../components/MyFooter";
+import BookAppointment from "@/components/BookAppointment";
 
 const BG = "/bg.jpg";
 const BG1 = "/bg1.jpg";
