@@ -54,7 +54,7 @@ const AdminPage = () => {
     return dateTime.toLocaleString("bg-BG", options);
   };
   useEffect(() => {
-    const adminArray = ["2"];
+    const adminArray = ["1"];
 
     const fetchData = async () => {
       if (user && adminArray.includes(user.id)) {

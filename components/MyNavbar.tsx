@@ -105,7 +105,7 @@ const MyNavbar = () => {
                   <DropdownMenuSeparator />
                   {session?.user ? (
                     <>
-                      {session?.user.email === "asd@gmail.com" ? (
+                      {session?.user.email === "krysteffsm@gmail.com" ? (
                         <DropdownMenuItem>
                           <Link href={"/admin"}>Admin</Link>
                         </DropdownMenuItem>

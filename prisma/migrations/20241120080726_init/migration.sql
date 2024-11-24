@@ -15,6 +15,8 @@ CREATE TABLE "User" (
 CREATE TABLE "Appointments" (
     "id" SERIAL NOT NULL,
     "datetime" TIMESTAMP(3) NOT NULL,
+    "note" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "uId" INTEGER NOT NULL,
 
     CONSTRAINT "Appointments_pkey" PRIMARY KEY ("id")
