@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 export async function DELETE(req: Request) {
   try {
     const body = await req.json();
-    console.log(body);
+
     const { appointmentId } = body;
     if (!appointmentId) {
       return NextResponse.json(

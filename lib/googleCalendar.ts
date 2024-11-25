@@ -48,7 +48,6 @@ export async function addEventToCalendar({
       requestBody: event,
     });
 
-    console.log("Event successfully added to the calendar:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error adding event:", error);

@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter, Orelega_One, Roboto_Slab } from "next/font/google";
-import SessionWrapper from "@/components/sessionWrapper";
+import SessionWrapper from "@/components/SessionWrapper";
 import { Toaster } from "@/components/ui/toaster";
 
 const orelega_One = Orelega_One({

@@ -49,14 +49,12 @@ const SignInForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    console.log("Form submitted", values);
     const signInData = await signIn("credentials", {
       email: values.email,
       password: values.password,
       redirect: false,
     });
 
-    console.log("signInData:", signInData);
     router.refresh();
 
     if (signInData?.error) {
