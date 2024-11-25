@@ -8,7 +8,7 @@ import { IoIosClose } from "react-icons/io";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { Link as ScrollLink } from "react-scroll";
 import { useSession } from "next-auth/react";
-import UserAccountNav from "./userAccountNav";
+import UserAccountNav from "./UserAccountNav";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,7 +26,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import SignInForm from "./form/signInForm";
+import SignInForm from "./form/SignInForm";
 import { MdManageAccounts } from "react-icons/md";
 import { usePathname } from "next/navigation";
 
