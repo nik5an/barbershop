@@ -63,6 +63,14 @@ const MyNavbar = () => {
             open ? "" : "hidden md:flex"
           }`}
         >
+          <li className="md:ml-4 my-0">
+            <Link
+              className="capitalize text-2xl text-white focus:text-white cursor-pointer drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]"
+              href={"/gallery"}
+            >
+              Галерия
+            </Link>
+          </li>
           {isMainPage &&
             links.map((link) => (
               <li key={link.href} className="md:ml-4 my-0">
