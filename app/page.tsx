@@ -142,7 +142,7 @@ export default function Home() {
           </div>
           <div className="mt-6">
             <h3 className="text-3xl font-bold">Телефон</h3>
-            <p className="mt-2 text-xl">+359 886 800 008</p>
+            <p className="mt-2 text-xl">+359 886003785</p>
           </div>
         </div>
         <div className="rounded-lg shadow-lg aspect-w-3 aspect-h-2 mt-4 min-h-96">

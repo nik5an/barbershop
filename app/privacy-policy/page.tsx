@@ -1,5 +1,5 @@
-import MyNavbar from "@/components/myNavbar";
-import Footer from "@/components/myFooter";
+import MyNavbar from "@/components/MyNavbar";
+import Footer from "@/components/MyFooter";
 
 export default function PrivacyPolicy() {
   return (
