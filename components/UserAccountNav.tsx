@@ -7,7 +7,7 @@ const UserAccountNav = () => {
   return (
     <Link
       href={"/"}
-      className="text-error"
+      className="text-error p-2 pr-16"
       onClick={() =>
         signOut({
           redirect: true,

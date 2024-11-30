@@ -8,7 +8,7 @@ import { IoIosClose } from "react-icons/io";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { Link as ScrollLink } from "react-scroll";
 import { useSession } from "next-auth/react";
-import UserAccountNav from "./UserAccountNav";
+import UserAccountNav from "./userAccountNav";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -115,18 +115,22 @@ const MyNavbar = () => {
                     <>
                       {session?.user.email === "krysteffsm@gmail.com" ? (
                         <DropdownMenuItem>
-                          <Link href={"/admin"}>Admin</Link>
+                          <Link href={"/admin"} className="p-2 pr-16">
+                            Admin
+                          </Link>
                         </DropdownMenuItem>
                       ) : null}
                       <DropdownMenuItem>
-                        <Link href={"/my-booking"}>Моите часове</Link>
+                        <Link href={"/my-booking"} className="p-2">
+                          Моите часове
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <UserAccountNav />
                       </DropdownMenuItem>
                     </>
                   ) : (
-                    <DialogTrigger className="w-20" asChild>
+                    <DialogTrigger className="p-2 pr-16 cursor-pointer" asChild>
                       <DropdownMenuItem>Влез</DropdownMenuItem>
                     </DialogTrigger>
                   )}
