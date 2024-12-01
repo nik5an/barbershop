@@ -9,7 +9,7 @@ export async function PATCH(req: Request) {
     const appointment = await db.appointments.findUnique({
       where: { id: appointmentId },
       include: {
-        user: true, // Assuming a relation exists to fetch user details
+        user: true,
       },
     });
 

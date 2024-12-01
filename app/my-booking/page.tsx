@@ -18,7 +18,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { CiClock1 } from "react-icons/ci";
 import { CiStickyNote } from "react-icons/ci";
 import { MdOutlineCalendarMonth } from "react-icons/md";
-import EditModal from "@/components/editAppointment";
 
 const MyBooking = () => {
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
@@ -143,9 +142,8 @@ const MyBooking = () => {
                           <MdOutlineCalendarMonth className="text-2xl" />
                           {formatDate(booking.datetime)}
                         </h2>
-                        <EditModal appointment={booking}></EditModal>
                         <AlertDialog>
-                          <AlertDialogTrigger className="justify-end border rounded-lg p-2 hover:bg-slate-50">
+                          <AlertDialogTrigger className="justify-end border rounded-lg p-2 bg-red-500 hover:bg-red-700">
                             Изтрий часа
                           </AlertDialogTrigger>
                           <AlertDialogContent>

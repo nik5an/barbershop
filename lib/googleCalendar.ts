@@ -96,8 +96,6 @@ export async function updateEventInCalendar({
       eventId,
       requestBody: updatedEvent,
     });
-
-    console.log("Google Calendar event updated successfully");
   } catch (error) {
     console.error("Error updating Google Calendar event:", error);
     throw new Error("Failed to update event in Google Calendar.");

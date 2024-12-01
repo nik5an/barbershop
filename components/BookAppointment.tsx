@@ -234,7 +234,9 @@ const BookAppointment = () => {
                 <AlertDialogTrigger
                   type="button"
                   disabled={!(date && selectedTimeSlot)}
-                  className="bg-black text-white rounded-lg p-3 text-base"
+                  className={`bg-black text-white rounded-lg p-3 text-base ${
+                    !(date && selectedTimeSlot) && "bg-slate-300"
+                  } `}
                 >
                   Запази час
                 </AlertDialogTrigger>
@@ -272,13 +274,15 @@ const BookAppointment = () => {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Затвори</AlertDialogCancel>
-                    <AlertDialogAction
-                      type="button"
-                      disabled={!(date && selectedTimeSlot)}
-                      onClick={() => saveBooking()}
-                    >
-                      Продължи
-                    </AlertDialogAction>
+                    <DialogTrigger>
+                      <AlertDialogAction
+                        type="button"
+                        disabled={!(date && selectedTimeSlot)}
+                        onClick={() => saveBooking()}
+                      >
+                        Продължи
+                      </AlertDialogAction>
+                    </DialogTrigger>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>

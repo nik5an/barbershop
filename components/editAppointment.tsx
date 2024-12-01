@@ -145,7 +145,7 @@ const EditModal = ({ appointment }: { appointment: any }) => {
 
   return (
     <Dialog>
-      <DialogTrigger className="mx-2 p-2 border rounded-lg">
+      <DialogTrigger className="mx-2 p-2 border rounded-lg bg-slate-50 hover:bg-slate-200">
         Редактирай
       </DialogTrigger>
       <DialogContent className="max-w-2xl overflow-y-scroll max-h-screen">
@@ -218,7 +218,9 @@ const EditModal = ({ appointment }: { appointment: any }) => {
               <AlertDialogTrigger
                 type="button"
                 disabled={!(date && selectedTimeSlot)}
-                className="bg-black text-white rounded-lg p-3 text-base"
+                className={`bg-black text-white rounded-lg p-3 text-base ${
+                  !(date && selectedTimeSlot) && "bg-slate-300"
+                } `}
               >
                 Запази промените
               </AlertDialogTrigger>
@@ -256,13 +258,15 @@ const EditModal = ({ appointment }: { appointment: any }) => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Затвори</AlertDialogCancel>
-                  <AlertDialogAction
-                    type="button"
-                    disabled={!(date && selectedTimeSlot)}
-                    onClick={handleEdit}
-                  >
-                    Продължи
-                  </AlertDialogAction>
+                  <DialogTrigger>
+                    <AlertDialogAction
+                      type="button"
+                      disabled={!(date && selectedTimeSlot)}
+                      onClick={handleEdit}
+                    >
+                      Продължи
+                    </AlertDialogAction>
+                  </DialogTrigger>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

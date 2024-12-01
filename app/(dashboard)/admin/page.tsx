@@ -164,7 +164,7 @@ const AdminPage = () => {
                           <div>
                             <EditModal appointment={booking}></EditModal>
                             <AlertDialog>
-                              <AlertDialogTrigger className="bg-red-500 justify-end border rounded-lg p-2 hover:bg-slate-50">
+                              <AlertDialogTrigger className="bg-red-500 justify-end border rounded-lg p-2 hover:bg-red-700">
                                 Изтрий часа
                               </AlertDialogTrigger>
                               <AlertDialogContent>
@@ -232,7 +232,7 @@ const AdminPage = () => {
                             {formatDate(booking.datetime)}
                           </h2>
                           <AlertDialog>
-                            <AlertDialogTrigger className="justify-end border rounded-lg p-2 hover:bg-slate-50">
+                            <AlertDialogTrigger className="justify-end border rounded-lg p-2 bg-red-500 hover:bg-red-700">
                               Изтрий часа
                             </AlertDialogTrigger>
                             <AlertDialogContent>
