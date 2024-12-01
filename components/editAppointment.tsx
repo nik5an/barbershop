@@ -100,14 +100,12 @@ const EditModal = ({ appointment }: { appointment: any }) => {
     }
   };
 
-  // Когато се избере нова дата, обновяваме заетите часове
   useEffect(() => {
     if (date) {
       getTimeSlots(date);
     }
   }, [date]);
 
-  // Функция за редактиране на час
   const handleEdit = async () => {
     if (!date || !selectedTimeSlot) return;
 
@@ -118,14 +116,13 @@ const EditModal = ({ appointment }: { appointment: any }) => {
       )
     );
 
-    // Изпращане на актуализираните данни към сървъра
     const response = await fetch("/api/appointment/editBooking", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        appointmentId: appointment.id, // ID на часа, който се редактира
+        appointmentId: appointment.id,
         datetime: updatedDateTime,
         note: myNote,
       }),
@@ -148,140 +145,130 @@ const EditModal = ({ appointment }: { appointment: any }) => {
 
   return (
     <Dialog>
-      <DialogTrigger className="mt-6 px-6 py-3 bg-primary text-xl text-black rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+      <DialogTrigger className="mx-2 p-2 border rounded-lg">
         Редактирай
       </DialogTrigger>
-      {!session?.user ? (
-        <DialogContent>
+      <DialogContent className="max-w-2xl overflow-y-scroll max-h-screen">
+        <DialogHeader>
           <DialogTitle className="mx-auto text-xl font-normal">
-            Моля влезнете в профила си за да продължите
+            Редакция
           </DialogTitle>
-          <SignInForm />
-        </DialogContent>
-      ) : (
-        <DialogContent className="max-w-2xl overflow-y-scroll max-h-screen">
-          <DialogHeader>
-            <DialogTitle className="mx-auto text-xl font-normal">
-              Избор на време
-            </DialogTitle>
-            <div>
-              <div className="grid grid-cols-1 md:grid-cols-2 mt-5">
-                <div className="flex flex-col gap-3 items-baseline">
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 mt-5">
+              <div className="flex flex-col gap-3 items-baseline">
+                <h2 className="flex gap-2 text-xl">
+                  <MdOutlineCalendarMonth className="text-2xl" />
+                  Нова дата
+                </h2>
+                <div className="flex justify-center mx-auto">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    disabled={isPast}
+                    className="rounded-md border"
+                  />
+                </div>
+              </div>
+              {date && (
+                <div className="mt-1">
                   <h2 className="flex gap-2 text-xl">
-                    <MdOutlineCalendarMonth className="text-2xl" />
-                    Изберете дата
+                    <CiClock1 className="text-2xl" />
+                    Нов час
                   </h2>
-                  <div className="flex justify-center mx-auto">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      disabled={isPast}
-                      className="rounded-md border"
-                    />
+                  <div className="grid grid-cols-3 gap-2 border rounded-lg p-4 mt-2">
+                    {timeSlots.map((item, index) => (
+                      <h2
+                        key={index}
+                        onClick={() => {
+                          if (selectedTimeSlot === item.time) {
+                            setSelectedTimeSlot(undefined);
+                          } else if (item.available) {
+                            setSelectedTimeSlot(item.time);
+                          }
+                        }}
+                        className={`p-2 border rounded-full text-center ${
+                          !item.available
+                            ? "bg-gray-300 text-gray-600 cursor-default"
+                            : "cursor-pointer hover:bg-black hover:text-white"
+                        } ${
+                          item.time === selectedTimeSlot &&
+                          item.available &&
+                          "bg-black text-white"
+                        }`}
+                      >
+                        {item.time}
+                      </h2>
+                    ))}
                   </div>
                 </div>
-                {date && (
-                  <div className="mt-1">
-                    <h2 className="flex gap-2 text-xl">
-                      <CiClock1 className="text-2xl" />
-                      Изберете час
-                    </h2>
-                    <div className="grid grid-cols-3 gap-2 border rounded-lg p-4 mt-2">
-                      {timeSlots.map((item, index) => (
-                        <h2
-                          key={index}
-                          onClick={() => {
-                            if (selectedTimeSlot === item.time) {
-                              setSelectedTimeSlot(undefined);
-                            } else if (item.available) {
-                              setSelectedTimeSlot(item.time);
-                            }
-                          }}
-                          className={`p-2 border rounded-full text-center ${
-                            !item.available
-                              ? "bg-gray-300 text-gray-600 cursor-default"
-                              : "cursor-pointer hover:bg-black hover:text-white"
-                          } ${
-                            item.time === selectedTimeSlot &&
-                            item.available &&
-                            "bg-black text-white"
-                          }`}
-                        >
-                          {item.time}
-                        </h2>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-              <Textarea
-                placeholder="Бележка (незадължително)"
-                className="mt-2"
-                value={myNote}
-                onChange={(e) => setNote(e.target.value)}
-              />
+              )}
             </div>
-          </DialogHeader>
-          <DialogFooter className="sm:justify-end">
-            <DialogClose asChild>
-              <AlertDialog>
-                <AlertDialogTrigger
-                  type="button"
-                  disabled={!(date && selectedTimeSlot)}
-                  className="bg-black text-white rounded-lg p-3 text-base"
-                  // Извиква функцията за редактиране
-                >
-                  Запази час
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle className="font-normal text-lg text-black">
-                      Сигурни ли сте, че искате да запазите този час?
-                    </AlertDialogTitle>
-                    {dateTime && (
-                      <AlertDialogDescription>
+            <Textarea
+              placeholder="Бележка (незадължително)"
+              className="mt-2"
+              value={myNote}
+              onChange={(e) => setNote(e.target.value)}
+            />
+          </div>
+        </DialogHeader>
+        <DialogFooter className="sm:justify-end">
+          <DialogClose asChild>
+            <AlertDialog>
+              <AlertDialogTrigger
+                type="button"
+                disabled={!(date && selectedTimeSlot)}
+                className="bg-black text-white rounded-lg p-3 text-base"
+              >
+                Запази промените
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="font-normal text-lg text-black">
+                    Сигурни ли сте, че искате да промените часа?
+                  </AlertDialogTitle>
+                  {dateTime && (
+                    <AlertDialogDescription>
+                      <p className="flex gap-2 text-lg">
+                        <MdOutlineCalendarMonth className="text-2xl" />
+                        {dateTime.getDate()}.{dateTime.getMonth() + 1}.
+                        {dateTime.getFullYear()}
+                      </p>
+                      <p className="flex gap-2 text-lg">
+                        <CiClock1 className="text-2xl" />
+                        {selectedTimeSlot}
+                      </p>
+                      {myNote && (
                         <p className="flex gap-2 text-lg">
-                          <MdOutlineCalendarMonth className="text-2xl" />
-                          {dateTime.getDate()}.{dateTime.getMonth() + 1}.
-                          {dateTime.getFullYear()}
+                          <CiStickyNote className="text-2xl" />
+                          {myNote}
                         </p>
-                        <p className="flex gap-2 text-lg">
-                          <CiClock1 className="text-2xl" />
-                          {selectedTimeSlot}
-                        </p>
-                        {myNote && (
-                          <p className="flex gap-2 text-lg">
-                            <CiStickyNote className="text-2xl" />
-                            {myNote}
-                          </p>
-                        )}
-                        <p className="flex gap-2 text-lg text-black">
-                          Политика за анулиране на час:
-                        </p>
-                        <p className="flex gap-2 text-base">
-                          Моля не анулирайте запазен час в рамките на 3 часа до
-                          него.
-                        </p>
-                      </AlertDialogDescription>
-                    )}
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Затвори</AlertDialogCancel>
-                    <AlertDialogAction
-                      type="button"
-                      disabled={!(date && selectedTimeSlot)}
-                      onClick={handleEdit}
-                    >
-                      Продължи
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      )}
+                      )}
+                      <p className="flex gap-2 text-lg text-black">
+                        Политика за анулиране на час:
+                      </p>
+                      <p className="flex gap-2 text-base">
+                        Моля не анулирайте запазен час в рамките на 3 часа до
+                        него.
+                      </p>
+                    </AlertDialogDescription>
+                  )}
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Затвори</AlertDialogCancel>
+                  <AlertDialogAction
+                    type="button"
+                    disabled={!(date && selectedTimeSlot)}
+                    onClick={handleEdit}
+                  >
+                    Продължи
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   );
 };

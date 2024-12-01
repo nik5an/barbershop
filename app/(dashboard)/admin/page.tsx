@@ -161,30 +161,32 @@ const AdminPage = () => {
                             <MdOutlineCalendarMonth className="text-2xl mt-1" />
                             {formatDate(booking.datetime)}
                           </h2>
-                          <EditModal appointment={booking}></EditModal>
-                          <AlertDialog>
-                            <AlertDialogTrigger className="justify-end border rounded-lg p-2 hover:bg-slate-50">
-                              Изтрий часа
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle className="font-medium">
-                                  Сигурни ли сте
-                                </AlertDialogTitle>
-                                <AlertDialogDescription className="font-normal">
-                                  Това ще изтрие вашия час за винаги.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Затвори</AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => deleteBooking(booking.id)}
-                                >
-                                  Продължи
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
+                          <div>
+                            <EditModal appointment={booking}></EditModal>
+                            <AlertDialog>
+                              <AlertDialogTrigger className="bg-red-500 justify-end border rounded-lg p-2 hover:bg-slate-50">
+                                Изтрий часа
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle className="font-medium">
+                                    Сигурни ли сте
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription className="font-normal">
+                                    Това ще изтрие вашия час за винаги.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Затвори</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => deleteBooking(booking.id)}
+                                  >
+                                    Продължи
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
                         </div>
                         <h2 className="flex gap-2 text-lg">
                           <CiClock1 className="text-2xl mt-0.5" />

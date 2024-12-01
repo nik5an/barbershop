@@ -1,12 +1,12 @@
 import { google } from "googleapis";
 
 interface EventDetails {
+  eventId?: string;
   datetime: string;
   title: string;
   description: string;
   clientName: string;
   clientPhoneNumber: string;
-  eventId?: string; // Optional field for updating an event
 }
 
 const oauth2Client = new google.auth.OAuth2(
@@ -19,7 +19,6 @@ oauth2Client.setCredentials({
   refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
 });
 
-// Function to add a new event to Google Calendar
 export async function addEventToCalendar({
   datetime,
   title,
@@ -57,25 +56,25 @@ export async function addEventToCalendar({
   }
 }
 
-// Function to update an existing event on Google Calendar
 export async function updateEventInCalendar({
   eventId,
   datetime,
-  title,
-  description,
+  note,
   clientName,
   clientPhoneNumber,
-}: EventDetails) {
-  if (!eventId) {
-    throw new Error("Event ID is required to update the event.");
-  }
-
+}: {
+  eventId: string | null;
+  datetime: string;
+  note: string;
+  clientName: string;
+  clientPhoneNumber: string;
+}) {
   try {
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-    const event = {
-      summary: `${title} - ${clientName}`,
-      description: `Client: ${clientName}\nPhone: ${clientPhoneNumber}\n${description}`,
+    const updatedEvent = {
+      summary: `Записан час - ${clientName}`,
+      description: `Client: ${clientName}\nPhone: ${clientPhoneNumber}\nNote: ${note}`,
       start: {
         dateTime: datetime,
         timeZone: "Europe/Sofia",
@@ -88,15 +87,19 @@ export async function updateEventInCalendar({
       },
     };
 
-    const response = await calendar.events.update({
+    if (!eventId) {
+      throw new Error("Invalid event ID: eventId cannot be null or undefined.");
+    }
+
+    await calendar.events.update({
       calendarId: "primary",
-      eventId: eventId, // Use the event ID to update the specific event
-      requestBody: event,
+      eventId,
+      requestBody: updatedEvent,
     });
 
-    return response.data;
+    console.log("Google Calendar event updated successfully");
   } catch (error) {
-    console.error("Error updating event:", error);
+    console.error("Error updating Google Calendar event:", error);
     throw new Error("Failed to update event in Google Calendar.");
   }
 }

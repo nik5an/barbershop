@@ -25,20 +25,32 @@ export async function POST(req: Request) {
       );
     }
 
-    const newAppointment = await db.appointments.create({
-      data: {
-        datetime,
-        note,
-        uId,
-      },
-    });
-
-    await addEventToCalendar({
+    const googleEvent = await addEventToCalendar({
       datetime,
       title: "Записан час",
       description: `Бележка: ${note}`,
       clientName: `${client.fname} ${client.lname}`,
       clientPhoneNumber: client.number,
+    });
+
+    const eventId = googleEvent?.id;
+
+    if (!eventId) {
+      return NextResponse.json(
+        {
+          message: "Failed to save Google Calendar event.",
+        },
+        { status: 500 }
+      );
+    }
+
+    const newAppointment = await db.appointments.create({
+      data: {
+        datetime,
+        note,
+        uId,
+        googleEventId: eventId,
+      },
     });
 
     return NextResponse.json(

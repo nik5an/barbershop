@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { updateEventInCalendar } from "@/lib/googleCalendar"; // Import the update function
+import { updateEventInCalendar } from "@/lib/googleCalendar";
 
 export async function PATCH(req: Request) {
   try {
     const { appointmentId, datetime, note } = await req.json();
 
-    // Check if the appointment exists
     const appointment = await db.appointments.findUnique({
       where: { id: appointmentId },
+      include: {
+        user: true, // Assuming a relation exists to fetch user details
+      },
     });
 
     if (!appointment) {
@@ -18,23 +20,21 @@ export async function PATCH(req: Request) {
       );
     }
 
-    // Update the appointment in the database
     const updatedAppointment = await db.appointments.update({
       where: { id: appointmentId },
       data: { datetime, note },
     });
 
-    // Update the Google Calendar event if event ID exists
-    if (appointment.googleEventId) {
-      // Assuming you store the Google Calendar event ID
+    try {
       await updateEventInCalendar({
         eventId: appointment.googleEventId,
         datetime,
-        title: "Записан час", // You can adjust the title as needed
-        description: note || "No additional notes", // Use the note as description
-        clientName: `${appointment.client.fname} ${appointment.client.lname}`,
-        clientPhoneNumber: appointment.client.number,
+        note,
+        clientName: `${appointment.user.fname} ${appointment.user.lname}`,
+        clientPhoneNumber: appointment.user.number,
       });
+    } catch (calendarError) {
+      console.error("Error updating Google Calendar event:", calendarError);
     }
 
     return NextResponse.json(
