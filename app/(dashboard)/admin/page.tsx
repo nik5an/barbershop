@@ -21,6 +21,7 @@ import { MdOutlineCalendarMonth } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import { IoPersonOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
+import EditModal from "@/components/editAppointment";
 
 const AdminPage = () => {
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
@@ -160,6 +161,7 @@ const AdminPage = () => {
                             <MdOutlineCalendarMonth className="text-2xl mt-1" />
                             {formatDate(booking.datetime)}
                           </h2>
+                          <EditModal appointment={booking}></EditModal>
                           <AlertDialog>
                             <AlertDialogTrigger className="justify-end border rounded-lg p-2 hover:bg-slate-50">
                               Изтрий часа

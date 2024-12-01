@@ -1,6 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogClose,
@@ -31,24 +29,29 @@ import { useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
 import SignInForm from "./form/SignInForm";
 import { CiStickyNote } from "react-icons/ci";
-import Link from "next/link";
 
-const BookAppointment = () => {
+const EditModal = ({ appointment }: { appointment: any }) => {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  const [date, setDate] = useState<Date | undefined>(tomorrow);
+  // Стартови стойности от текущия час
+  const [date, setDate] = useState<Date | undefined>(
+    new Date(appointment.datetime)
+  );
   const [timeSlots, setTimeSlots] = useState<
     { time: string; available: boolean }[]
   >([]);
-  const [myNote, setNote] = useState("");
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<
-    string | undefined
-  >();
+  const [myNote, setNote] = useState(appointment.note || "");
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | undefined>(
+    appointment.datetime.split("T")[1].substring(0, 5)
+  );
+
   const { toast } = useToast();
   const { data: session } = useSession();
   const temp = session?.user.id?.toString();
   const userId = temp ? parseInt(temp) : undefined;
+
+  // Форматиране на час в необходимия формат
   const dateTime =
     date && selectedTimeSlot
       ? new Date(
@@ -59,94 +62,85 @@ const BookAppointment = () => {
         )
       : null;
 
-  useEffect(() => {
-    if (date) {
-      getTime();
-    } else {
-      setTimeSlots([]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date]);
-
-  const getTime = async () => {
-    if (!date) return;
-
+  // Функция за извличане на заетите часове
+  const getTimeSlots = async (selectedDate: Date) => {
+    const dateString = selectedDate.toISOString().split("T")[0]; // Преобразуваме в формат yyyy-mm-dd
     try {
-      const timeZoneOffset = date.getTimezoneOffset();
-      const timeZoneDate = new Date(date.getTime() - timeZoneOffset * 60000);
-
-      const formattedDate = timeZoneDate.toISOString().split("T")[0];
       const response = await fetch(
-        `/api/appointment/getBookedSlots?date=${formattedDate}`
+        `/api/appointment/getBookedSlots?date=${dateString}`
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch booked slots");
+        throw new Error("Неуспешно извличане на заетите часове");
       }
       const bookedSlots = await response.json();
 
-      const timeList = [];
-      for (let i = 10; i <= 18; i++) {
-        const time = `${i < 10 ? "0" + i : i}:00`;
-        const available = !bookedSlots.includes(time);
-        timeList.push({
-          time,
-          available,
+      const slots = [];
+      for (let hour = 10; hour <= 18; hour++) {
+        const fullHour = `${hour < 10 ? "0" + hour : hour}:00`;
+        const halfHour = `${hour < 10 ? "0" + hour : hour}:30`;
+
+        slots.push({
+          time: fullHour,
+          available: !bookedSlots.includes(fullHour),
         });
-        if (i !== 18) {
-          const halfHourTime = `${i < 10 ? "0" + i : i}:30`;
-          const halfHourAvailable = !bookedSlots.includes(halfHourTime);
-          timeList.push({
-            time: halfHourTime,
-            available: halfHourAvailable,
-          });
-        }
+
+        slots.push({
+          time: halfHour,
+          available: !bookedSlots.includes(halfHour),
+        });
       }
-      setTimeSlots(timeList);
+      setTimeSlots(slots);
     } catch (error) {
-      console.error("Error fetching booked slots:", error);
+      console.error("Грешка при извличането на заетите часове:", error);
       toast({
-        title: "Error",
-        description: "Failed to fetch booked slots",
+        title: "Грешка",
+        description: "Неуспешно извличане на заетите часове",
         variant: "destructive",
       });
     }
   };
 
-  const saveBooking = async () => {
-    if (!date || !selectedTimeSlot || !userId) return;
+  // Когато се избере нова дата, обновяваме заетите часове
+  useEffect(() => {
+    if (date) {
+      getTimeSlots(date);
+    }
+  }, [date]);
 
-    const response = await fetch("/api/appointment", {
-      method: "POST",
+  // Функция за редактиране на час
+  const handleEdit = async () => {
+    if (!date || !selectedTimeSlot) return;
+
+    const updatedDateTime = new Date(
+      date.setHours(
+        parseInt(selectedTimeSlot.split(":")[0]),
+        parseInt(selectedTimeSlot.split(":")[1])
+      )
+    );
+
+    // Изпращане на актуализираните данни към сървъра
+    const response = await fetch("/api/appointment/editBooking", {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        datetime: dateTime,
+        appointmentId: appointment.id, // ID на часа, който се редактира
+        datetime: updatedDateTime,
         note: myNote,
-        uId: userId,
       }),
     });
 
     if (response.ok) {
       toast({
-        title: "Success",
-        description: (
-          <>
-            Вие успешно запазихте час. Може да си видите часа от Профил -&gt;
-            Моите часове или като цъкнете{" "}
-            <Link href="/my-booking" className="text-black hover:underline">
-              тук
-            </Link>
-          </>
-        ),
+        title: "Успех",
+        description: "Часът е успешно редактиран.",
         variant: "success",
       });
-
-      getTime();
     } else {
       toast({
-        title: "Error",
-        description: "Something went wrong",
+        title: "Грешка",
+        description: "Неуспешно редактиране на час.",
         variant: "destructive",
       });
     }
@@ -155,17 +149,17 @@ const BookAppointment = () => {
   return (
     <Dialog>
       <DialogTrigger className="mt-6 px-6 py-3 bg-primary text-xl text-black rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
-        ЗАПАЗИ ЧАС
+        Редактирай
       </DialogTrigger>
       {!session?.user ? (
         <DialogContent>
           <DialogTitle className="mx-auto text-xl font-normal">
             Моля влезнете в профила си за да продължите
           </DialogTitle>
-          <SignInForm></SignInForm>
+          <SignInForm />
         </DialogContent>
       ) : (
-        <DialogContent className="max-w-2xl overflow-y-scroll max-h-screen ">
+        <DialogContent className="max-w-2xl overflow-y-scroll max-h-screen">
           <DialogHeader>
             <DialogTitle className="mx-auto text-xl font-normal">
               Избор на време
@@ -224,8 +218,9 @@ const BookAppointment = () => {
               <Textarea
                 placeholder="Бележка (незадължително)"
                 className="mt-2"
+                value={myNote}
                 onChange={(e) => setNote(e.target.value)}
-              ></Textarea>
+              />
             </div>
           </DialogHeader>
           <DialogFooter className="sm:justify-end">
@@ -235,13 +230,14 @@ const BookAppointment = () => {
                   type="button"
                   disabled={!(date && selectedTimeSlot)}
                   className="bg-black text-white rounded-lg p-3 text-base"
+                  // Извиква функцията за редактиране
                 >
                   Запази час
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle className="font-normal text-lg text-black">
-                      Сигурни ли сте, че искате да запазите този час
+                      Сигурни ли сте, че искате да запазите този час?
                     </AlertDialogTitle>
                     {dateTime && (
                       <AlertDialogDescription>
@@ -275,7 +271,7 @@ const BookAppointment = () => {
                     <AlertDialogAction
                       type="button"
                       disabled={!(date && selectedTimeSlot)}
-                      onClick={() => saveBooking()}
+                      onClick={handleEdit}
                     >
                       Продължи
                     </AlertDialogAction>
@@ -290,4 +286,4 @@ const BookAppointment = () => {
   );
 };
 
-export default BookAppointment;
+export default EditModal;

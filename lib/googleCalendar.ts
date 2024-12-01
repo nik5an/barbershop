@@ -6,6 +6,7 @@ interface EventDetails {
   description: string;
   clientName: string;
   clientPhoneNumber: string;
+  eventId?: string; // Optional field for updating an event
 }
 
 const oauth2Client = new google.auth.OAuth2(
@@ -18,6 +19,7 @@ oauth2Client.setCredentials({
   refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
 });
 
+// Function to add a new event to Google Calendar
 export async function addEventToCalendar({
   datetime,
   title,
@@ -52,5 +54,49 @@ export async function addEventToCalendar({
   } catch (error) {
     console.error("Error adding event:", error);
     throw new Error("Failed to add event to Google Calendar.");
+  }
+}
+
+// Function to update an existing event on Google Calendar
+export async function updateEventInCalendar({
+  eventId,
+  datetime,
+  title,
+  description,
+  clientName,
+  clientPhoneNumber,
+}: EventDetails) {
+  if (!eventId) {
+    throw new Error("Event ID is required to update the event.");
+  }
+
+  try {
+    const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+
+    const event = {
+      summary: `${title} - ${clientName}`,
+      description: `Client: ${clientName}\nPhone: ${clientPhoneNumber}\n${description}`,
+      start: {
+        dateTime: datetime,
+        timeZone: "Europe/Sofia",
+      },
+      end: {
+        dateTime: new Date(
+          new Date(datetime).getTime() + 30 * 60 * 1000
+        ).toISOString(),
+        timeZone: "Europe/Sofia",
+      },
+    };
+
+    const response = await calendar.events.update({
+      calendarId: "primary",
+      eventId: eventId, // Use the event ID to update the specific event
+      requestBody: event,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating event:", error);
+    throw new Error("Failed to update event in Google Calendar.");
   }
 }
