@@ -1,5 +1,4 @@
 import MyNavbar from "@/components/MyNavbar";
-import Footer from "@/components/MyFooter";
 
 export default function PrivacyPolicy() {
   return (
@@ -45,7 +44,6 @@ export default function PrivacyPolicy() {
           </p>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

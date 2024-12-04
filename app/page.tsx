@@ -1,6 +1,5 @@
 import MyNavbar from "../components/MyNavbar";
 import Image from "next/image";
-import Footer from "../components/MyFooter";
 import BookAppointment from "@/components/BookAppointment";
 
 const BG = "/bg.jpg";
@@ -153,7 +152,6 @@ export default function Home() {
           ></iframe>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

@@ -145,7 +145,7 @@ const EditModal = ({ appointment }: { appointment: any }) => {
 
   return (
     <Dialog>
-      <DialogTrigger className="mx-2 p-2 border rounded-lg bg-slate-50 hover:bg-slate-200">
+      <DialogTrigger className="mr-2 p-2 w-full border rounded-lg bg-slate-50 hover:bg-slate-200">
         Редактирай
       </DialogTrigger>
       <DialogContent className="max-w-2xl overflow-y-scroll max-h-screen">

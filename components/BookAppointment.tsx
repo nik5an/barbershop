@@ -279,6 +279,7 @@ const BookAppointment = () => {
                         type="button"
                         disabled={!(date && selectedTimeSlot)}
                         onClick={() => saveBooking()}
+                        className="w-full"
                       >
                         Продължи
                       </AlertDialogAction>

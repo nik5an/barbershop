@@ -1,6 +1,5 @@
 import React from "react";
 import MyNavbar from "@/components/MyNavbar";
-import Footer from "@/components/MyFooter";
 import Image from "next/image";
 
 const images = [
@@ -17,7 +16,7 @@ const Gallery = () => {
         <MyNavbar />
       </div>
 
-      <div className="py-64 bg-gray-100">
+      <div className="py-40 ">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <h2 className="text-3xl font-semibold text-center text-gray-800 mb-8">
             Нашата галерия
@@ -41,8 +40,6 @@ const Gallery = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </>
   );
 };

@@ -130,11 +130,14 @@ const MyBooking = () => {
             <p>Error: {error}</p>
           ) : (
             <>
-              <TabsContent value="upcoming">
+              <TabsContent
+                value="upcoming"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 "
+              >
                 {upcomingBookings.map((booking, index) => (
                   <div
                     key={index}
-                    className="flex gap-2 items-center border p-3 m-3 rounded-lg"
+                    className="flex gap-2 items-center border p-3 rounded-lg"
                   >
                     <div className="flex flex-col gap-2 w-full">
                       <div className="flex justify-between items-center">
@@ -180,11 +183,14 @@ const MyBooking = () => {
                   </div>
                 ))}
               </TabsContent>
-              <TabsContent value="expired">
+              <TabsContent
+                value="expired"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 "
+              >
                 {expiredBookings.map((booking, index) => (
                   <div
                     key={index}
-                    className="flex gap-2 items-center border p-3 m-3 rounded-lg"
+                    className="flex gap-2 items-center border p-3 rounded-lg"
                   >
                     <div className="flex flex-col gap-2 w-full">
                       <h2 className="flex gap-2 text-lg">

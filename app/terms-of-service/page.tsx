@@ -1,5 +1,4 @@
 import MyNavbar from "@/components/MyNavbar";
-import Footer from "@/components/MyFooter";
 
 export default function TermsOfService() {
   return (
@@ -28,7 +27,6 @@ export default function TermsOfService() {
           </p>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

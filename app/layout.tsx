@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter, Orelega_One, Roboto_Slab } from "next/font/google";
 import SessionWrapper from "@/components/SessionWrapper";
 import { Toaster } from "@/components/ui/toaster";
+import MyFooter from "@/components/MyFooter";
 
 const orelega_One = Orelega_One({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({
   return (
     <SessionWrapper>
       <html lang="en" data-theme="bumblebee">
+        <div></div>
         <head>
           <link rel="icon" href="/favicon.ico" />
         </head>
@@ -36,6 +38,7 @@ export default function RootLayout({
           className={(inter.className, orelega_One.className, anton.className)}
         >
           <main>{children}</main>
+          <MyFooter></MyFooter>
           <Toaster></Toaster>
         </body>
       </html>
