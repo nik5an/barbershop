@@ -1,7 +1,7 @@
 import { MdManageAccounts, MdOutlineAccountCircle } from "react-icons/md";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import UserAccountNav from "./userAccountNav";
+import UserAccountNav from "./UserAccountNav";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import SignInForm from "./form/signInForm";
+import SignInForm from "./form/SignInForm";
 
 const UserDropdown = async () => {
   const { data: session } = useSession();

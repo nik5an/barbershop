@@ -8,7 +8,7 @@ import { IoIosClose } from "react-icons/io";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { Link as ScrollLink } from "react-scroll";
 import { useSession } from "next-auth/react";
-import UserAccountNav from "./userAccountNav";
+import UserAccountNav from "./UserAccountNav";
 import {
   DropdownMenu,
   DropdownMenuContent,
