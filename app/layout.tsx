@@ -29,7 +29,6 @@ export default function RootLayout({
   return (
     <SessionWrapper>
       <html lang="en" data-theme="bumblebee">
-        <div></div>
         <head>
           <link rel="icon" href="/favicon.ico" />
         </head>
