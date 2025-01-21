@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -33,6 +34,7 @@
     "mysql": "^2.18.1",
     "next": "^14.2.18",
     "next-auth": "^4.24.7",
+    "patch-package": "^8.0.0",
     "react": "^18",
     "react-day-picker": "^8.10.0",
     "react-dom": "^18",
