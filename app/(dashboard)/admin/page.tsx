@@ -171,8 +171,9 @@ const AdminPage = () => {
                                 <AlertDialogContent>
                                   <AlertDialogHeader>
                                     <AlertDialogTitle className="font-medium">
-                                      Сигурни ли сте
+                                      Сигурни ли сте?
                                     </AlertDialogTitle>
+
                                     <AlertDialogDescription className="font-normal">
                                       Това ще изтрие вашия час за винаги.
                                     </AlertDialogDescription>
@@ -189,6 +190,7 @@ const AdminPage = () => {
                                   </AlertDialogFooter>
                                 </AlertDialogContent>
                               </AlertDialog>
+
                               <EditModal appointment={booking}></EditModal>
                             </div>
                           </div>

@@ -25,6 +25,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import SignUpForm from "./SignUpForm";
+import { useEffect, useState } from "react";
 
 const FormSchema = z.object({
   email: z
@@ -40,6 +41,7 @@ const FormSchema = z.object({
 const SignInForm = () => {
   const router = useRouter();
   const { toast } = useToast();
+  const [email, setEmail] = useState("");
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -48,14 +50,46 @@ const SignInForm = () => {
     },
   });
 
+  const handleForgotPassword = async () => {
+    if (!email) {
+      toast({
+        title: "Error",
+        description: "Моля, въведете имейл адрес.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const response = await fetch("/api/auth/reset-request", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (response.ok) {
+      toast({
+        title: "Success",
+        description:
+          "Изпратихме линк за възстановяване на паролата на вашия имейл.",
+        variant: "success",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: "Възникна грешка! Проверете имейла си и опитайте отново.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     const signInData = await signIn("credentials", {
       email: values.email,
       password: values.password,
       redirect: false,
     });
-
-    router.refresh();
 
     if (signInData?.error) {
       toast({
@@ -72,6 +106,7 @@ const SignInForm = () => {
       router.refresh();
     }
   };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
@@ -139,6 +174,32 @@ const SignInForm = () => {
               </DialogTitle>
               <SignUpForm></SignUpForm>
             </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      </div>
+      <div className="text-center mt-4">
+        <Dialog>
+          <DialogTrigger className="text-blue-500 hover:underline">
+            Забравена парола?
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Възстановяване на парола</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <Input
+                placeholder="Въведете вашия имейл адрес"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Button
+                onClick={handleForgotPassword}
+                className="w-full bg-slate-900 text-white"
+              >
+                Изпрати линк за възстановяване
+              </Button>
+            </div>
           </DialogContent>
         </Dialog>
       </div>
