@@ -16,11 +16,11 @@ export default function Home() {
     <div className="relative">
       <div id="hero">
         <div
-          className="bg-cover bg-center"
+          className="bg-cover bg-center "
           style={{ backgroundImage: `url(${BG})` }}
         >
           <MyNavbar />
-          <div className="text-white py-4 md:py-24">
+          <div className="text-white py-4 md:py-24 animate-fade-in-up">
             <div className="bg-black bg-opacity-50 rounded-lg py-4 md:py-20 text-center max-w-3xl mx-auto my-36 md:my-8 border-white border">
               <h1 className="text-5xl md:text-6xl lg:text-8xl lg:mt-0 outline-2 drop-shadow-[0_5.2px_1.2px_rgba(0,0,0,0.8)] ">
                 RELAX BARBERSHOP
@@ -39,7 +39,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mx-auto text-center my-8" id="services">
+      <div className="mx-auto text-center my-8 " id="services">
         <h1 className="text-4xl font-bold">Услуги</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 m-4">
           <div>
