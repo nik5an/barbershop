@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -9,10 +9,24 @@ import MyNavbar from "@/components/MyNavbar";
 const ResetPassword = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
   const { toast } = useToast();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const tokenFromParams = searchParams.get("token");
+    if (tokenFromParams) {
+      setToken(tokenFromParams);
+    } else {
+      toast({
+        title: "Error",
+        description: "Token is missing.",
+        variant: "destructive",
+      });
+      router.push("/");
+    }
+  }, [searchParams, toast, router]);
 
   const handleResetPassword = async () => {
     if (!password || password !== confirmPassword) {
