@@ -126,7 +126,7 @@ export default function Home() {
         className="grid grid-cols-1 lg:grid-cols-2 py-8 px-4 max-w-7xl mx-auto"
         id="about"
       >
-        <div className="flex flex-col items-center text-center">
+        <div className="flex flex-col items-center text-justify">
           <h2 className="text-4xl font-bold">За нас</h2>
           <p className="mt-4 text-xl leading-6 max-w-md mx-auto">
             Бръснарницата отваря през 2020-та година и вече 4 години се грижим
@@ -136,7 +136,7 @@ export default function Home() {
             визията.
           </p>
           <div className="mt-6">
-            <h3 className="text-3xl font-bold">Адрес</h3>
+            <h3 className="text-3xl font-bold text-center">Адрес</h3>
             <p className="mt-2 text-xl">гр.Пловдив, ул. Княз Александър I, 7</p>
           </div>
           <div className="mt-6">
