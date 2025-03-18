@@ -31,7 +31,44 @@ import { useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
 import SignInForm from "./form/SignInForm";
 import { CiStickyNote } from "react-icons/ci";
+import { PiScissorsFill } from "react-icons/pi";
+import { FaMoneyBillWave } from "react-icons/fa";
 import Link from "next/link";
+
+type Service = {
+  id: number;
+  name: string;
+  price: number;
+  durationMin: number;
+};
+
+// Define services based on the main page
+const SERVICES: Service[] = [
+  {
+    id: 1,
+    name: "Подстрижка",
+    price: 15,
+    durationMin: 30,
+  },
+  {
+    id: 2,
+    name: "Брада",
+    price: 10,
+    durationMin: 20,
+  },
+  {
+    id: 3,
+    name: "Вежди",
+    price: 5,
+    durationMin: 10,
+  },
+  {
+    id: 4,
+    name: "Брада + коса",
+    price: 20,
+    durationMin: 45,
+  },
+];
 
 const BookAppointment = () => {
   const tomorrow = new Date();
@@ -45,6 +82,7 @@ const BookAppointment = () => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<
     string | undefined
   >();
+  const [selectedService, setSelectedService] = useState<Service>(SERVICES[0]);
   const { toast } = useToast();
   const { data: session } = useSession();
   const temp = session?.user.id?.toString();
@@ -113,7 +151,7 @@ const BookAppointment = () => {
   };
 
   const saveBooking = async () => {
-    if (!date || !selectedTimeSlot || !userId) return;
+    if (!date || !selectedTimeSlot || !userId || !selectedService) return;
 
     const response = await fetch("/api/appointment", {
       method: "POST",
@@ -124,6 +162,9 @@ const BookAppointment = () => {
         datetime: dateTime,
         note: myNote,
         uId: userId,
+        serviceName: selectedService.name,
+        servicePrice: selectedService.price,
+        serviceDuration: selectedService.durationMin,
       }),
     });
 
@@ -170,9 +211,10 @@ const BookAppointment = () => {
             <DialogTitle className="mx-auto text-xl font-normal">
               Избор на време
             </DialogTitle>
-            <div>
-              <div className="grid grid-cols-1 md:grid-cols-2 mt-5">
-                <div className="flex flex-col gap-3 items-baseline">
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Date selection section */}
+                <div className="flex flex-col gap-3">
                   <h2 className="flex gap-2 text-xl">
                     <MdOutlineCalendarMonth className="text-2xl" />
                     Изберете дата
@@ -187,43 +229,75 @@ const BookAppointment = () => {
                     />
                   </div>
                 </div>
-                {date && (
-                  <div className="mt-1">
-                    <h2 className="flex gap-2 text-xl">
-                      <CiClock1 className="text-2xl" />
-                      Изберете час
-                    </h2>
-                    <div className="grid grid-cols-3 gap-2 border rounded-lg p-4 mt-2">
-                      {timeSlots.map((item, index) => (
-                        <h2
-                          key={index}
-                          onClick={() => {
-                            if (selectedTimeSlot === item.time) {
-                              setSelectedTimeSlot(undefined);
-                            } else if (item.available) {
-                              setSelectedTimeSlot(item.time);
-                            }
-                          }}
-                          className={`p-2 border rounded-full text-center ${
-                            !item.available
-                              ? "bg-gray-300 text-gray-600 cursor-default"
-                              : "cursor-pointer hover:bg-black hover:text-white"
-                          } ${
-                            item.time === selectedTimeSlot &&
-                            item.available &&
-                            "bg-black text-white"
-                          }`}
-                        >
-                          {item.time}
-                        </h2>
-                      ))}
-                    </div>
+
+                {/* Service selection section */}
+                <div>
+                  <h2 className="flex gap-2 text-xl">
+                    <PiScissorsFill className="text-2xl" />
+                    Изберете услуга
+                  </h2>
+                  <div className="grid grid-cols-1 gap-2 border rounded-lg p-4 mt-2">
+                    {SERVICES.map((service) => (
+                      <div
+                        key={service.id}
+                        onClick={() => setSelectedService(service)}
+                        className={`p-2 border rounded-lg cursor-pointer hover:bg-black hover:text-white ${
+                          selectedService?.id === service.id
+                            ? "bg-black text-white"
+                            : ""
+                        }`}
+                      >
+                        <div className="flex justify-between items-center">
+                          <span>{service.name}</span>
+                          <span>{service.price} лв</span>
+                        </div>
+                        <div className="text-sm text-gray-400">
+                          {service.durationMin} минути
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                )}
+                </div>
               </div>
+
+              {/* Time selection section - now full width */}
+              {date && selectedService && (
+                <div className="mt-6">
+                  <h2 className="flex gap-2 text-xl">
+                    <CiClock1 className="text-2xl" />
+                    Изберете час
+                  </h2>
+                  <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 border rounded-lg p-4 mt-2">
+                    {timeSlots.map((item, index) => (
+                      <h2
+                        key={index}
+                        onClick={() => {
+                          if (selectedTimeSlot === item.time) {
+                            setSelectedTimeSlot(undefined);
+                          } else if (item.available) {
+                            setSelectedTimeSlot(item.time);
+                          }
+                        }}
+                        className={`p-2 border rounded-full text-center ${
+                          !item.available
+                            ? "bg-gray-300 text-gray-600 cursor-default"
+                            : "cursor-pointer hover:bg-black hover:text-white"
+                        } ${
+                          item.time === selectedTimeSlot &&
+                          item.available &&
+                          "bg-black text-white"
+                        }`}
+                      >
+                        {item.time}
+                      </h2>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <Textarea
                 placeholder="Бележка (незадължително)"
-                className="mt-2"
+                className="mt-4"
                 onChange={(e) => setNote(e.target.value)}
               ></Textarea>
             </div>
@@ -233,9 +307,10 @@ const BookAppointment = () => {
               <AlertDialog>
                 <AlertDialogTrigger
                   type="button"
-                  disabled={!(date && selectedTimeSlot)}
+                  disabled={!(date && selectedTimeSlot && selectedService)}
                   className={`bg-black text-white rounded-lg p-3 text-base ${
-                    !(date && selectedTimeSlot) && "bg-slate-300"
+                    !(date && selectedTimeSlot && selectedService) &&
+                    "bg-slate-300"
                   } `}
                 >
                   Запази час
@@ -245,7 +320,7 @@ const BookAppointment = () => {
                     <AlertDialogTitle className="font-normal text-lg text-black">
                       Сигурни ли сте, че искате да запазите този час
                     </AlertDialogTitle>
-                    {dateTime && (
+                    {dateTime && selectedService && (
                       <AlertDialogDescription>
                         <p className="flex gap-2 text-lg">
                           <MdOutlineCalendarMonth className="text-2xl" />
@@ -254,7 +329,12 @@ const BookAppointment = () => {
                         </p>
                         <p className="flex gap-2 text-lg">
                           <CiClock1 className="text-2xl" />
-                          {selectedTimeSlot}
+                          {selectedTimeSlot} - {selectedService.name} (
+                          {selectedService.durationMin} мин.)
+                        </p>
+                        <p className="flex gap-2 text-lg">
+                          <FaMoneyBillWave className="text-2xl" />
+                          Цена: {selectedService.price} лв
                         </p>
                         {myNote && (
                           <p className="flex gap-2 text-lg">
@@ -262,7 +342,7 @@ const BookAppointment = () => {
                             {myNote}
                           </p>
                         )}
-                        <p className="flex gap-2 text-lg text-black">
+                        <p className="flex gap-2 text-lg text-black mt-4">
                           Политика за анулиране на час:
                         </p>
                         <p className="flex gap-2 text-base">
@@ -277,7 +357,9 @@ const BookAppointment = () => {
                     <DialogTrigger>
                       <AlertDialogAction
                         type="button"
-                        disabled={!(date && selectedTimeSlot)}
+                        disabled={
+                          !(date && selectedTimeSlot && selectedService)
+                        }
                         onClick={() => saveBooking()}
                         className="w-full"
                       >

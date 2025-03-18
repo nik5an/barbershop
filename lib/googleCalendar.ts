@@ -7,6 +7,7 @@ interface EventDetails {
   description: string;
   clientName: string;
   clientPhoneNumber: string;
+  durationMin?: number;
 }
 
 const oauth2Client = new google.auth.OAuth2(
@@ -25,6 +26,7 @@ export async function addEventToCalendar({
   description,
   clientName,
   clientPhoneNumber,
+  durationMin = 30,
 }: EventDetails) {
   try {
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
@@ -38,7 +40,7 @@ export async function addEventToCalendar({
       },
       end: {
         dateTime: new Date(
-          new Date(datetime).getTime() + 30 * 60 * 1000
+          new Date(datetime).getTime() + durationMin * 60 * 1000
         ).toISOString(),
         timeZone: "Europe/Sofia",
       },

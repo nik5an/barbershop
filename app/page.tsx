@@ -1,6 +1,7 @@
 import MyNavbar from "../components/MyNavbar";
 import Image from "next/image";
 import BookAppointment from "@/components/BookAppointment";
+import Testimonials from "@/components/Testimonials";
 
 const BG = "/bg.jpg";
 const BG1 = "/bg1.jpg";
@@ -21,7 +22,7 @@ export default function Home() {
         >
           <MyNavbar />
           <div className="text-white py-4 md:py-24 animate-fade-in-up">
-            <div className="bg-black bg-opacity-50 rounded-lg py-4 md:py-20 text-center max-w-3xl mx-auto my-36 md:my-8 border-white border">
+            <div className="bg-black bg-opacity-50 rounded-lg py-4 text-center max-w-3xl mx-auto my-36 md:my-8 border-white border">
               <h1 className="text-5xl md:text-6xl lg:text-8xl lg:mt-0 outline-2 drop-shadow-[0_5.2px_1.2px_rgba(0,0,0,0.8)] ">
                 RELAX BARBERSHOP
               </h1>
@@ -100,7 +101,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="relative">
+      <div id="hours" className="relative">
         <div
           className="bg-cover bg-center bg-fixed "
           style={{ backgroundImage: `url(${BG1})` }}
@@ -122,6 +123,12 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Customer Reviews Section */}
+      <div className="container px-4 w-full">
+        <Testimonials />
+      </div>
+
       <div
         className="grid grid-cols-1 lg:grid-cols-2 py-8 px-4 max-w-7xl mx-auto"
         id="about"
