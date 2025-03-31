@@ -2,6 +2,7 @@ import MyNavbar from "../components/MyNavbar";
 import Image from "next/image";
 import BookAppointment from "@/components/BookAppointment";
 import Testimonials from "@/components/Testimonials";
+import AiChat from "@/components/AiChat";
 
 const BG = "/bg.jpg";
 const BG1 = "/bg1.jpg";
@@ -159,6 +160,9 @@ export default function Home() {
           ></iframe>
         </div>
       </div>
+
+      {/* AI Chat Assistant */}
+      <AiChat />
     </div>
   );
 }
